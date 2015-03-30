@@ -2,3 +2,5 @@
 Version=1.0
 [Project1]
 ProjectPath=WiFi_board.PrjPcb
+[Project2]
+ProjectPath=ServoController.PrjPcb
