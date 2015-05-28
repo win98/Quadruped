@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : stm32f2xx_hal_msp.c
-  * Date               : 27/05/2015 16:12:18
+  * Date               : 28/05/2015 15:41:58
   * Description        : This file provides code for the MSP Initialization 
   *                      and de-Initialization codes.
   ******************************************************************************
@@ -83,7 +83,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* System interrupt init*/
-    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART2_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspInit 1 */
 

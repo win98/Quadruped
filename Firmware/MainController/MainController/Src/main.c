@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 27/05/2015 16:12:18
+  * Date               : 28/05/2015 15:41:59
   * Description        : Main program body
   ******************************************************************************
   *
@@ -34,6 +34,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f2xx_hal.h"
+#include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */
 #include "WiFiCommModule.h"
@@ -42,6 +43,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+osThreadId defaultTaskHandle;
+osThreadId wfCommTaskHandle;
+
+xQueueHandle wfQueue;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -49,6 +55,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -78,6 +85,7 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET);
+
     WF_Init();
     HAL_Delay(1000);
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_SET);
@@ -87,6 +95,44 @@ int main(void)
     
     SERVO_PROTOCOL_Init();
   /* USER CODE END 2 */
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  
+  
+  
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  osThreadDef(wfCommTask, WF_CommThread, osPriorityNormal, 0, 128);
+  wfCommTaskHandle = osThreadCreate(osThread(wfCommTask), NULL);
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  wfQueue = xQueueCreate(100, sizeof(uint8_t));
+  WF_SetRxQueue(wfQueue);
+  /* USER CODE END RTOS_QUEUES */
+ 
+  
+  /* Start scheduler */
+  osKernelStart(NULL, NULL);
+  
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -230,6 +276,20 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/* StartDefaultTask function */
+void StartDefaultTask(void const * argument)
+{
+    uint8_t data[100];
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+    for(;;)
+    {
+        xQueueReceive(wfQueue, data, portMAX_DELAY);
+        osDelay(1);
+    }
+  /* USER CODE END 5 */ 
+}
 
 #ifdef USE_FULL_ASSERT
 

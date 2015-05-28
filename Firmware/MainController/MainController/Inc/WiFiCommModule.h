@@ -1,3 +1,8 @@
+#ifndef _WIFI_COMM_MODULE_H_
+#define _WIFI_COMM_MODULE_H_
+
+#include "cmsis_os.h"
+
 typedef enum
 {
     WF_TX_ERROR = 1,
@@ -27,4 +32,7 @@ typedef enum
 } WF_COMMAND_STATUS;
 
 void WF_Init (void);
-void WF_CommThread (void);
+void WF_SetRxQueue (xQueueHandle queue);
+void WF_CommThread (void const * argument);
+
+#endif

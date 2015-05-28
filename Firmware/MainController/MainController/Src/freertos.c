@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    stm32f2xx_it.c
-  * @date    28/05/2015 15:41:58
-  * @brief   Interrupt Service Routines.
+  * File Name          : freertos.c
+  * Date               : 28/05/2015 15:41:58
+  * Description        : Code for freertos applications
   ******************************************************************************
   *
   * COPYRIGHT(c) 2015 STMicroelectronics
@@ -31,48 +31,30 @@
   *
   ******************************************************************************
   */
+
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f2xx_hal.h"
-#include "stm32f2xx.h"
-#include "stm32f2xx_it.h"
-#include "cmsis_os.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
-/* USER CODE BEGIN 0 */
+/* USER CODE BEGIN Includes */     
 
-/* USER CODE END 0 */
+/* USER CODE END Includes */
 
-/* External variables --------------------------------------------------------*/
-extern void xPortSysTickHandler(void);
+/* Variables -----------------------------------------------------------------*/
 
-/******************************************************************************/
-/*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
-/******************************************************************************/
+/* USER CODE BEGIN Variables */
 
-/**
-* @brief This function handles System tick timer.
-*/
-void SysTick_Handler(void)
-{
-  /* USER CODE BEGIN SysTick_IRQn 0 */
+/* USER CODE END Variables */
 
-  /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
-  if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
-    xPortSysTickHandler();
-  }
-  /* USER CODE BEGIN SysTick_IRQn 1 */
+/* Function prototypes -------------------------------------------------------*/
 
-  /* USER CODE END SysTick_IRQn 1 */
-}
+/* USER CODE BEGIN FunctionPrototypes */
 
-/******************************************************************************/
-/* STM32F2xx Peripheral Interrupt Handlers                                    */
-/* Add here the Interrupt Handlers for the used peripherals.                  */
-/* For the available peripheral interrupt handler names,                      */
-/* please refer to the startup file (startup_stm32f2xx.s).                    */
-/******************************************************************************/
+/* USER CODE END FunctionPrototypes */
+/* Hook prototypes */
 
-/* USER CODE BEGIN 1 */
+/* USER CODE BEGIN Application */
+     
+/* USER CODE END Application */
 
-/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

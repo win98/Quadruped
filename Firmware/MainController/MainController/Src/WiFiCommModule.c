@@ -44,6 +44,12 @@ const uint8_t k_wifi_channel = 11;                  // AP mode channel
  */
 const uint16_t k_wife_udp_server_port = 49001;      // UDP server port for incoming connections
 
+/*
+ * RTOS variables
+ */
+xQueueHandle udpQueue;
+
+
 /* 
  * Internal machine states.
  */
@@ -193,7 +199,12 @@ void WF_Init (void)
     BGLIB_INITIALIZE(send_message);
 }
 
-void WF_CommThread (void)
+void WF_SetRxQueue (xQueueHandle queue)
+{
+    udpQueue = queue;
+}
+
+void WF_CommThread (void const * argument)
 {
     HAL_StatusTypeDef ret;
     // Pointer to wifi packet.
@@ -485,6 +496,11 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
     
     uint16_t *servoChannelsData;
     int8_t servoChannelNum;
+    
+    for (int i = 0; i < dataLength; i++)
+    {        
+        xQueueSend(udpQueue, &data[i], portMAX_DELAY);
+    }
     
     switch (robotCmd)
     {
