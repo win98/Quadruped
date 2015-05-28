@@ -22,17 +22,29 @@ typedef enum
     WF_ROBOT_NO_CMD = 0,
     WF_ROBOT_TAKE_CONTROL = '1',
     WF_ROBOT_DROP_CONTROL,
-    WF_ROBOT_SET_CHANNEL
+    WF_ROBOT_SET_CHANNEL,
+    WF_ROBOT_SET_CHANNELS,
+    WF_ROBOT_SET_LINEAR_VELOCITY,
+    WF_ROBOT_SET_ANGULAR_VELOCITY,
+    WF_ROBOT_PING
 } WF_ROBOT_COMMAND;
 
 typedef enum
 {
     WF_CMD_OK = '0',
-    WF_CMD_FAIL
+    WF_CMD_ERROR
 } WF_COMMAND_STATUS;
+
+typedef struct
+{
+    WF_ROBOT_COMMAND cmd;
+    uint8_t *data;
+    uint32_t length;
+} WF_Robo_Packet;
 
 void WF_Init (void);
 void WF_SetRxQueue (xQueueHandle queue);
-void WF_CommThread (void const * argument);
+void WF_CommThread (void const *argument);
+void WF_RobotPacketProcessed (WF_Robo_Packet *datagramInfo);
 
 #endif

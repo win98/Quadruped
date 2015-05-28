@@ -22,6 +22,8 @@
  */
 #define WF_NIL  0
 
+#define ROBOT_CMD_SET_CHANNEL_MDL       4
+
 /*
  * Mandatory declaration
  */
@@ -117,6 +119,7 @@ static void send_message (uint8 msg_len, uint8 *msg_data, uint16 data_len, uint8
 void WF_ERROR_Handler (WF_ERROR_Code error);
 void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint16_t port);
 void WF_ClientEndpointCreated (uint8_t endpoint);
+WF_Robo_Packet* WF_CreateRobotPacket (WF_ROBOT_COMMAND cmd, uint8_t *data, uint32_t dataLength);
 
 /*
  * Function for switching between states.
@@ -494,14 +497,8 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
 {
     robotCmd = (WF_ROBOT_COMMAND)data[0];
     
-    uint16_t *servoChannelsData;
-    int8_t servoChannelNum;
-    
-    for (int i = 0; i < dataLength; i++)
-    {        
-        xQueueSend(udpQueue, &data[i], portMAX_DELAY);
-    }
-    
+    uint8_t *cmdData;
+
     switch (robotCmd)
     {
         case WF_ROBOT_TAKE_CONTROL:
@@ -552,20 +549,64 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
         
             if (address == remote_client_address && port == remote_client_port)
             {
-                servoChannelNum = (int8_t)data[1];
-                servoChannelsData = (uint16_t *)&data[2];
+                if (dataLength >= ROBOT_CMD_SET_CHANNEL_MDL)
+                {
+                    cmdData = &data[1];
                 
-                //Data comes in Big-endian format.
-                //Convert it to Little-endian.
-                uint16_t pulseWidthMs = (servoChannelsData[0] & 0x00FF) << 8;
-                pulseWidthMs |= (servoChannelsData[0] & 0xFF00) >> 8;
+                    // Data comes in Little-endian format.
+                    WF_Robo_Packet *packet =  WF_CreateRobotPacket(robotCmd, cmdData, 3);
+                    // Send data to main thread.
+                    xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 
-                //Send message to main thread with value and channel
-                //!!!!!!!!!!!!!
+                    // Send response Ok.
+                    tx_packet[0] = WF_CMD_OK;
+                    tx_packet_length = 1;
+                }
+                else
+                {
+                    // Send response Fail.
+                    tx_packet[0] = WF_CMD_ERROR;
+                    tx_packet_length = 1;
+                }                
                 
-                // Send response Ok.
-                tx_packet[0] = WF_CMD_OK;
-                tx_packet_length = 1;
+                current_client_endpoint = remote_client_endpoint;
+                
+                goto_state(wlan_state_udp_send_response);
+            }
+            else
+            {
+                goto_state(wlan_state_idle);
+            }
+            
+            break;
+            
+        case WF_ROBOT_SET_CHANNELS:
+            //Client requests to set servo channels values.
+        
+            if (address == remote_client_address && port == remote_client_port)
+            {
+                uint8_t channelsNum = data[1];
+                
+                
+                if (dataLength >= channelsNum * 2 + 1)
+                {
+                    cmdData = &data[1];
+                
+                    // Data comes in Little-endian format.
+                    WF_Robo_Packet *packet =  WF_CreateRobotPacket(robotCmd, cmdData, 3);
+                    // Send data to main thread.
+                    xQueueSend(udpQueue, &packet, portMAX_DELAY);
+                
+                    // Send response Ok.
+                    tx_packet[0] = WF_CMD_OK;
+                    tx_packet_length = 1;
+                }
+                else
+                {
+                    // Send response Fail.
+                    tx_packet[0] = WF_CMD_ERROR;
+                    tx_packet_length = 1;
+                }                
                 
                 current_client_endpoint = remote_client_endpoint;
                 
@@ -610,7 +651,7 @@ void WF_ClientEndpointCreated (uint8_t endpoint)
         {
             // Send response Fail with current
             // remote cliend data.
-            tx_packet[0] = WF_CMD_FAIL;
+            tx_packet[0] = WF_CMD_ERROR;
             tx_packet[1] = (uint8_t)(remote_client_address >> 24);
             tx_packet[2] = (uint8_t)(remote_client_address >> 16);
             tx_packet[3] = (uint8_t)(remote_client_address >> 8); 
@@ -728,4 +769,32 @@ HAL_StatusTypeDef uart_rx(int data_length, uint8_t *data)
     HAL_StatusTypeDef status = HAL_UART_Receive(&huart3, data, data_length, 1000000);
     
     return status;
+}
+
+/*
+ * Function called when a datagram received and needs to be
+ * sent to main thread.
+ * @param data Additional data.
+ * @param data_length Length of the datagram.
+ */
+WF_Robo_Packet* WF_CreateRobotPacket (WF_ROBOT_COMMAND cmd, uint8_t *data, uint32_t dataLength)
+{
+    WF_Robo_Packet *result = (WF_Robo_Packet *)malloc(sizeof(WF_Robo_Packet));
+    result->cmd = cmd;
+    result->data = (uint8_t *)malloc(dataLength);
+    memcpy(result->data, data, dataLength);
+    result->length = dataLength;
+    
+    return result;
+}
+
+/*
+ * Function called when a datagram processed and its
+ * data may be destoyed.
+ * @param datagramInfo Datagram info pointer.
+ */
+void WF_RobotPacketProcessed (WF_Robo_Packet *packet)
+{
+    free(packet->data);
+    free(packet);
 }

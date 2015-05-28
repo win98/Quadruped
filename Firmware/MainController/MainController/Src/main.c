@@ -58,7 +58,7 @@ static void MX_GPIO_Init(void);
 void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
-
+#define WF_QUEUE_SIZE   1
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -124,7 +124,7 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
-  wfQueue = xQueueCreate(100, sizeof(uint8_t));
+  wfQueue = xQueueCreate(WF_QUEUE_SIZE, sizeof(WF_Robo_Packet *));
   WF_SetRxQueue(wfQueue);
   /* USER CODE END RTOS_QUEUES */
  
@@ -280,12 +280,18 @@ void MX_GPIO_Init(void)
 /* StartDefaultTask function */
 void StartDefaultTask(void const * argument)
 {
-    uint8_t data[100];
+    WF_Robo_Packet *packet;
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
     for(;;)
     {
-        xQueueReceive(wfQueue, data, portMAX_DELAY);
+        xQueueReceive(wfQueue, &packet, portMAX_DELAY);
+        
+        // Process packet here
+        //!!!!!!!!!!!!!!!!
+        
+        WF_RobotPacketProcessed (packet);
+        
         osDelay(1);
     }
   /* USER CODE END 5 */ 

@@ -1,3 +1,5 @@
 *.pbi.cout
 *.pbi
 *.o
+*.pbd
+*.pbd.browse
