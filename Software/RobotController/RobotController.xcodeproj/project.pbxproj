@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A55BFABF1B186E350011296F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFABE1B186E350011296F /* main.m */; };
+		A55BFAC21B186E350011296F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC11B186E350011296F /* AppDelegate.m */; };
+		A55BFAC51B186E350011296F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC41B186E350011296F /* ViewController.m */; };
+		A55BFAC81B186E350011296F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A55BFAC61B186E350011296F /* Main.storyboard */; };
+		A55BFACA1B186E350011296F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A55BFAC91B186E350011296F /* Images.xcassets */; };
+		A55BFACD1B186E350011296F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BFACB1B186E350011296F /* LaunchScreen.xib */; };
+		A55BFAD91B186E360011296F /* RobotControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAD81B186E360011296F /* RobotControllerTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A55BFAD31B186E360011296F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A55BFAB11B186E350011296F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A55BFAB81B186E350011296F;
+			remoteInfo = RobotController;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A55BFAB91B186E350011296F /* RobotController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RobotController.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A55BFABD1B186E350011296F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A55BFABE1B186E350011296F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A55BFAC01B186E350011296F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A55BFAC11B186E350011296F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A55BFAC31B186E350011296F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A55BFAC41B186E350011296F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A55BFAC71B186E350011296F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A55BFAC91B186E350011296F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A55BFACC1B186E350011296F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		A55BFAD21B186E360011296F /* RobotControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RobotControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A55BFAD71B186E360011296F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A55BFAD81B186E360011296F /* RobotControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RobotControllerTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A55BFAB61B186E350011296F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A55BFACF1B186E360011296F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A55BFAB01B186E350011296F = {
+			isa = PBXGroup;
+			children = (
+				A55BFABB1B186E350011296F /* RobotController */,
+				A55BFAD51B186E360011296F /* RobotControllerTests */,
+				A55BFABA1B186E350011296F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A55BFABA1B186E350011296F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A55BFAB91B186E350011296F /* RobotController.app */,
+				A55BFAD21B186E360011296F /* RobotControllerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A55BFABB1B186E350011296F /* RobotController */ = {
+			isa = PBXGroup;
+			children = (
+				A55BFAC01B186E350011296F /* AppDelegate.h */,
+				A55BFAC11B186E350011296F /* AppDelegate.m */,
+				A55BFAC31B186E350011296F /* ViewController.h */,
+				A55BFAC41B186E350011296F /* ViewController.m */,
+				A55BFAC61B186E350011296F /* Main.storyboard */,
+				A55BFAC91B186E350011296F /* Images.xcassets */,
+				A55BFACB1B186E350011296F /* LaunchScreen.xib */,
+				A55BFABC1B186E350011296F /* Supporting Files */,
+			);
+			path = RobotController;
+			sourceTree = "<group>";
+		};
+		A55BFABC1B186E350011296F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A55BFABD1B186E350011296F /* Info.plist */,
+				A55BFABE1B186E350011296F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A55BFAD51B186E360011296F /* RobotControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				A55BFAD81B186E360011296F /* RobotControllerTests.m */,
+				A55BFAD61B186E360011296F /* Supporting Files */,
+			);
+			path = RobotControllerTests;
+			sourceTree = "<group>";
+		};
+		A55BFAD61B186E360011296F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A55BFAD71B186E360011296F /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A55BFAB81B186E350011296F /* RobotController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A55BFADC1B186E360011296F /* Build configuration list for PBXNativeTarget "RobotController" */;
+			buildPhases = (
+				A55BFAB51B186E350011296F /* Sources */,
+				A55BFAB61B186E350011296F /* Frameworks */,
+				A55BFAB71B186E350011296F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RobotController;
+			productName = RobotController;
+			productReference = A55BFAB91B186E350011296F /* RobotController.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A55BFAD11B186E360011296F /* RobotControllerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A55BFADF1B186E360011296F /* Build configuration list for PBXNativeTarget "RobotControllerTests" */;
+			buildPhases = (
+				A55BFACE1B186E360011296F /* Sources */,
+				A55BFACF1B186E360011296F /* Frameworks */,
+				A55BFAD01B186E360011296F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A55BFAD41B186E360011296F /* PBXTargetDependency */,
+			);
+			name = RobotControllerTests;
+			productName = RobotControllerTests;
+			productReference = A55BFAD21B186E360011296F /* RobotControllerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A55BFAB11B186E350011296F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = Sergey;
+				TargetAttributes = {
+					A55BFAB81B186E350011296F = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					A55BFAD11B186E360011296F = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = A55BFAB81B186E350011296F;
+					};
+				};
+			};
+			buildConfigurationList = A55BFAB41B186E350011296F /* Build configuration list for PBXProject "RobotController" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A55BFAB01B186E350011296F;
+			productRefGroup = A55BFABA1B186E350011296F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A55BFAB81B186E350011296F /* RobotController */,
+				A55BFAD11B186E360011296F /* RobotControllerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A55BFAB71B186E350011296F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A55BFAC81B186E350011296F /* Main.storyboard in Resources */,
+				A55BFACD1B186E350011296F /* LaunchScreen.xib in Resources */,
+				A55BFACA1B186E350011296F /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A55BFAD01B186E360011296F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A55BFAB51B186E350011296F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A55BFAC51B186E350011296F /* ViewController.m in Sources */,
+				A55BFAC21B186E350011296F /* AppDelegate.m in Sources */,
+				A55BFABF1B186E350011296F /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A55BFACE1B186E360011296F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A55BFAD91B186E360011296F /* RobotControllerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A55BFAD41B186E360011296F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A55BFAB81B186E350011296F /* RobotController */;
+			targetProxy = A55BFAD31B186E360011296F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A55BFAC61B186E350011296F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A55BFAC71B186E350011296F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A55BFACB1B186E350011296F /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A55BFACC1B186E350011296F /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A55BFADA1B186E360011296F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A55BFADB1B186E360011296F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A55BFADD1B186E360011296F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = RobotController/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A55BFADE1B186E360011296F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = RobotController/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A55BFAE01B186E360011296F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = RobotControllerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RobotController.app/RobotController";
+			};
+			name = Debug;
+		};
+		A55BFAE11B186E360011296F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = RobotControllerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RobotController.app/RobotController";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A55BFAB41B186E350011296F /* Build configuration list for PBXProject "RobotController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A55BFADA1B186E360011296F /* Debug */,
+				A55BFADB1B186E360011296F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A55BFADC1B186E360011296F /* Build configuration list for PBXNativeTarget "RobotController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A55BFADD1B186E360011296F /* Debug */,
+				A55BFADE1B186E360011296F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A55BFADF1B186E360011296F /* Build configuration list for PBXNativeTarget "RobotControllerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A55BFAE01B186E360011296F /* Debug */,
+				A55BFAE11B186E360011296F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A55BFAB11B186E350011296F /* Project object */;
+}
