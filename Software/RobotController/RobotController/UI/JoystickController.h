@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JoystickView.h"
 
 @interface JoystickController : UIViewController
+
+@property (nonatomic, strong) JoystickView *joystickView;;
 
 @end

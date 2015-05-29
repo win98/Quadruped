@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "JoystickController.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    JoystickController *ctr = [[JoystickController alloc] init];
+    
+    [self.view addSubview:ctr.view];
+    
+    ctr.view.center = CGPointMake(200, 200);
 }
 
 - (void)didReceiveMemoryWarning {

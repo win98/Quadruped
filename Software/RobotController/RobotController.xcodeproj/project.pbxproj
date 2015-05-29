@@ -7,26 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A545FB2E1B188A7F0095F9EE /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A545FB2D1B188A7F0095F9EE /* ViewController.xib */; };
+		A545FB361B188F300095F9EE /* JoystickController.m in Sources */ = {isa = PBXBuildFile; fileRef = A545FB351B188F300095F9EE /* JoystickController.m */; };
+		A545FB391B188F7A0095F9EE /* JoystickView.m in Sources */ = {isa = PBXBuildFile; fileRef = A545FB381B188F7A0095F9EE /* JoystickView.m */; };
+		A545FB3C1B1896E20095F9EE /* joystick_seat.png in Resources */ = {isa = PBXBuildFile; fileRef = A545FB3A1B1896E20095F9EE /* joystick_seat.png */; };
+		A545FB3F1B1897AD0095F9EE /* joystick_stick.png in Resources */ = {isa = PBXBuildFile; fileRef = A545FB3E1B1897AD0095F9EE /* joystick_stick.png */; };
 		A55BFABF1B186E350011296F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFABE1B186E350011296F /* main.m */; };
 		A55BFAC21B186E350011296F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC11B186E350011296F /* AppDelegate.m */; };
 		A55BFAC51B186E350011296F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC41B186E350011296F /* ViewController.m */; };
-		A55BFAC81B186E350011296F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A55BFAC61B186E350011296F /* Main.storyboard */; };
 		A55BFACA1B186E350011296F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A55BFAC91B186E350011296F /* Images.xcassets */; };
-		A55BFACD1B186E350011296F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BFACB1B186E350011296F /* LaunchScreen.xib */; };
-		A55BFAD91B186E360011296F /* RobotControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAD81B186E360011296F /* RobotControllerTests.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		A55BFAD31B186E360011296F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A55BFAB11B186E350011296F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A55BFAB81B186E350011296F;
-			remoteInfo = RobotController;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		A545FB2D1B188A7F0095F9EE /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		A545FB341B188F300095F9EE /* JoystickController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickController.h; sourceTree = "<group>"; };
+		A545FB351B188F300095F9EE /* JoystickController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoystickController.m; sourceTree = "<group>"; };
+		A545FB371B188F7A0095F9EE /* JoystickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickView.h; sourceTree = "<group>"; };
+		A545FB381B188F7A0095F9EE /* JoystickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoystickView.m; sourceTree = "<group>"; };
+		A545FB3A1B1896E20095F9EE /* joystick_seat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = joystick_seat.png; sourceTree = "<group>"; };
+		A545FB3E1B1897AD0095F9EE /* joystick_stick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = joystick_stick.png; sourceTree = "<group>"; };
 		A55BFAB91B186E350011296F /* RobotController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RobotController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A55BFABD1B186E350011296F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A55BFABE1B186E350011296F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -34,10 +33,7 @@
 		A55BFAC11B186E350011296F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A55BFAC31B186E350011296F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		A55BFAC41B186E350011296F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		A55BFAC71B186E350011296F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A55BFAC91B186E350011296F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		A55BFACC1B186E350011296F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		A55BFAD21B186E360011296F /* RobotControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RobotControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A55BFAD71B186E360011296F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A55BFAD81B186E360011296F /* RobotControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RobotControllerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -50,16 +46,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A55BFACF1B186E360011296F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A545FB331B188ED70095F9EE /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A545FB3A1B1896E20095F9EE /* joystick_seat.png */,
+				A545FB3E1B1897AD0095F9EE /* joystick_stick.png */,
+				A545FB341B188F300095F9EE /* JoystickController.h */,
+				A545FB351B188F300095F9EE /* JoystickController.m */,
+				A545FB371B188F7A0095F9EE /* JoystickView.h */,
+				A545FB381B188F7A0095F9EE /* JoystickView.m */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		A55BFAB01B186E350011296F = {
 			isa = PBXGroup;
 			children = (
@@ -73,7 +75,6 @@
 			isa = PBXGroup;
 			children = (
 				A55BFAB91B186E350011296F /* RobotController.app */,
-				A55BFAD21B186E360011296F /* RobotControllerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -81,13 +82,12 @@
 		A55BFABB1B186E350011296F /* RobotController */ = {
 			isa = PBXGroup;
 			children = (
+				A545FB331B188ED70095F9EE /* UI */,
 				A55BFAC01B186E350011296F /* AppDelegate.h */,
 				A55BFAC11B186E350011296F /* AppDelegate.m */,
 				A55BFAC31B186E350011296F /* ViewController.h */,
 				A55BFAC41B186E350011296F /* ViewController.m */,
-				A55BFAC61B186E350011296F /* Main.storyboard */,
-				A55BFAC91B186E350011296F /* Images.xcassets */,
-				A55BFACB1B186E350011296F /* LaunchScreen.xib */,
+				A545FB2D1B188A7F0095F9EE /* ViewController.xib */,
 				A55BFABC1B186E350011296F /* Supporting Files */,
 			);
 			path = RobotController;
@@ -96,6 +96,7 @@
 		A55BFABC1B186E350011296F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A55BFAC91B186E350011296F /* Images.xcassets */,
 				A55BFABD1B186E350011296F /* Info.plist */,
 				A55BFABE1B186E350011296F /* main.m */,
 			);
@@ -139,24 +140,6 @@
 			productReference = A55BFAB91B186E350011296F /* RobotController.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A55BFAD11B186E360011296F /* RobotControllerTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A55BFADF1B186E360011296F /* Build configuration list for PBXNativeTarget "RobotControllerTests" */;
-			buildPhases = (
-				A55BFACE1B186E360011296F /* Sources */,
-				A55BFACF1B186E360011296F /* Frameworks */,
-				A55BFAD01B186E360011296F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A55BFAD41B186E360011296F /* PBXTargetDependency */,
-			);
-			name = RobotControllerTests;
-			productName = RobotControllerTests;
-			productReference = A55BFAD21B186E360011296F /* RobotControllerTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -168,10 +151,6 @@
 				TargetAttributes = {
 					A55BFAB81B186E350011296F = {
 						CreatedOnToolsVersion = 6.1;
-					};
-					A55BFAD11B186E360011296F = {
-						CreatedOnToolsVersion = 6.1;
-						TestTargetID = A55BFAB81B186E350011296F;
 					};
 				};
 			};
@@ -189,7 +168,6 @@
 			projectRoot = "";
 			targets = (
 				A55BFAB81B186E350011296F /* RobotController */,
-				A55BFAD11B186E360011296F /* RobotControllerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -199,16 +177,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A55BFAC81B186E350011296F /* Main.storyboard in Resources */,
-				A55BFACD1B186E350011296F /* LaunchScreen.xib in Resources */,
+				A545FB3C1B1896E20095F9EE /* joystick_seat.png in Resources */,
+				A545FB2E1B188A7F0095F9EE /* ViewController.xib in Resources */,
+				A545FB3F1B1897AD0095F9EE /* joystick_stick.png in Resources */,
 				A55BFACA1B186E350011296F /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A55BFAD01B186E360011296F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,46 +193,13 @@
 			files = (
 				A55BFAC51B186E350011296F /* ViewController.m in Sources */,
 				A55BFAC21B186E350011296F /* AppDelegate.m in Sources */,
+				A545FB391B188F7A0095F9EE /* JoystickView.m in Sources */,
 				A55BFABF1B186E350011296F /* main.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A55BFACE1B186E360011296F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A55BFAD91B186E360011296F /* RobotControllerTests.m in Sources */,
+				A545FB361B188F300095F9EE /* JoystickController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		A55BFAD41B186E360011296F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A55BFAB81B186E350011296F /* RobotController */;
-			targetProxy = A55BFAD31B186E360011296F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		A55BFAC61B186E350011296F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A55BFAC71B186E350011296F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		A55BFACB1B186E350011296F /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A55BFACC1B186E350011296F /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A55BFADA1B186E360011296F /* Debug */ = {
@@ -346,6 +285,7 @@
 				INFOPLIST_FILE = RobotController/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "C0A486DB-79C5-445A-B8DD-5AA6C6B7D247";
 			};
 			name = Debug;
 		};
@@ -356,40 +296,7 @@
 				INFOPLIST_FILE = RobotController/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		A55BFAE01B186E360011296F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RobotControllerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RobotController.app/RobotController";
-			};
-			name = Debug;
-		};
-		A55BFAE11B186E360011296F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RobotControllerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RobotController.app/RobotController";
+				PROVISIONING_PROFILE = "C0A486DB-79C5-445A-B8DD-5AA6C6B7D247";
 			};
 			name = Release;
 		};
@@ -412,14 +319,7 @@
 				A55BFADE1B186E360011296F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-		};
-		A55BFADF1B186E360011296F /* Build configuration list for PBXNativeTarget "RobotControllerTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A55BFAE01B186E360011296F /* Debug */,
-				A55BFAE11B186E360011296F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

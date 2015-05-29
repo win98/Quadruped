@@ -10,4 +10,7 @@
 
 @interface JoystickView : UIView
 
+@property (nonatomic, strong) UIImageView *stickImage;
+@property (nonatomic, strong) UIImageView *seatImage;
+
 @end
