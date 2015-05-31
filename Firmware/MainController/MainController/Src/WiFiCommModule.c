@@ -842,12 +842,12 @@ void WF_ClientEndpointCreated (uint8_t endpoint)
             // remote cliend data.
             tx_packet[0] = robotCmd;
             tx_packet[1] = WF_CMD_ERROR;
-            tx_packet[2] = (uint8_t)(remote_client_address >> 24);
+            tx_packet[2] = (uint8_t)(remote_client_address >> 24);  //remote_client_address comes from WF121 in Little-endian format.
             tx_packet[3] = (uint8_t)(remote_client_address >> 16);
             tx_packet[4] = (uint8_t)(remote_client_address >> 8); 
             tx_packet[5] = (uint8_t)remote_client_address;
-            tx_packet[6] = (uint8_t)(remote_client_port >> 8);
-            tx_packet[7] = (uint8_t)remote_client_port;
+            tx_packet[6] = (uint8_t)(remote_client_port && 0x00FF);             // Send in Little-endian format
+            tx_packet[7] = (uint8_t)(remote_client_port >> 8  && 0x00FF));
             tx_packet_length = 8;
         }
         

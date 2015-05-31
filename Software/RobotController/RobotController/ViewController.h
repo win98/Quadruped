@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+#import "JoystickController.h"
+#import "PowerButton.h"
+#import "RobotCommander.h"
 
+@interface ViewController : UIViewController <RobotCommanderProtocol>
+
+@property (nonatomic, strong) PowerButton *powerButton;
+@property (nonatomic, strong) JoystickController *joystickLeft;
+@property (nonatomic, strong) JoystickController *joystickRight;
+@property (nonatomic, strong) RobotCommander *robotCommander;
 
 @end
 

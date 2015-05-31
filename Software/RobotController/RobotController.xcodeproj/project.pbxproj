@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A539F7761B19CED300630F15 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A539F7741B19CED300630F15 /* Default-568h@2x.png */; };
+		A539F7771B19CED300630F15 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A539F7751B19CED300630F15 /* Default@2x.png */; };
 		A545FB2E1B188A7F0095F9EE /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A545FB2D1B188A7F0095F9EE /* ViewController.xib */; };
 		A545FB361B188F300095F9EE /* JoystickController.m in Sources */ = {isa = PBXBuildFile; fileRef = A545FB351B188F300095F9EE /* JoystickController.m */; };
 		A545FB391B188F7A0095F9EE /* JoystickView.m in Sources */ = {isa = PBXBuildFile; fileRef = A545FB381B188F7A0095F9EE /* JoystickView.m */; };
@@ -16,9 +18,15 @@
 		A55BFAC21B186E350011296F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC11B186E350011296F /* AppDelegate.m */; };
 		A55BFAC51B186E350011296F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC41B186E350011296F /* ViewController.m */; };
 		A55BFACA1B186E350011296F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A55BFAC91B186E350011296F /* Images.xcassets */; };
+		A57B45311B1A1C9E00F461EE /* PowerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A57B45301B1A1C9E00F461EE /* PowerButton.m */; };
+		A57B45341B1A1CB100F461EE /* power_button_off.png in Resources */ = {isa = PBXBuildFile; fileRef = A57B45321B1A1CB100F461EE /* power_button_off.png */; };
+		A57B45351B1A1CB100F461EE /* power_button_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A57B45331B1A1CB100F461EE /* power_button_on.png */; };
+		A57B45381B1A2B4500F461EE /* RobotCommander.m in Sources */ = {isa = PBXBuildFile; fileRef = A57B45371B1A2B4500F461EE /* RobotCommander.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A539F7741B19CED300630F15 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		A539F7751B19CED300630F15 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		A545FB2D1B188A7F0095F9EE /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
 		A545FB341B188F300095F9EE /* JoystickController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickController.h; sourceTree = "<group>"; };
 		A545FB351B188F300095F9EE /* JoystickController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoystickController.m; sourceTree = "<group>"; };
@@ -36,6 +44,12 @@
 		A55BFAC91B186E350011296F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A55BFAD71B186E360011296F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A55BFAD81B186E360011296F /* RobotControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RobotControllerTests.m; sourceTree = "<group>"; };
+		A57B452F1B1A1C9E00F461EE /* PowerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PowerButton.h; sourceTree = "<group>"; };
+		A57B45301B1A1C9E00F461EE /* PowerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PowerButton.m; sourceTree = "<group>"; };
+		A57B45321B1A1CB100F461EE /* power_button_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = power_button_off.png; sourceTree = "<group>"; };
+		A57B45331B1A1CB100F461EE /* power_button_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = power_button_on.png; sourceTree = "<group>"; };
+		A57B45361B1A2B4500F461EE /* RobotCommander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotCommander.h; sourceTree = "<group>"; };
+		A57B45371B1A2B4500F461EE /* RobotCommander.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RobotCommander.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,15 +63,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A539F7731B19CED300630F15 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A539F7741B19CED300630F15 /* Default-568h@2x.png */,
+				A539F7751B19CED300630F15 /* Default@2x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		A545FB331B188ED70095F9EE /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A57B45321B1A1CB100F461EE /* power_button_off.png */,
+				A57B45331B1A1CB100F461EE /* power_button_on.png */,
 				A545FB3A1B1896E20095F9EE /* joystick_seat.png */,
 				A545FB3E1B1897AD0095F9EE /* joystick_stick.png */,
 				A545FB341B188F300095F9EE /* JoystickController.h */,
 				A545FB351B188F300095F9EE /* JoystickController.m */,
 				A545FB371B188F7A0095F9EE /* JoystickView.h */,
 				A545FB381B188F7A0095F9EE /* JoystickView.m */,
+				A57B452F1B1A1C9E00F461EE /* PowerButton.h */,
+				A57B45301B1A1C9E00F461EE /* PowerButton.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -87,8 +114,11 @@
 				A55BFAC11B186E350011296F /* AppDelegate.m */,
 				A55BFAC31B186E350011296F /* ViewController.h */,
 				A55BFAC41B186E350011296F /* ViewController.m */,
+				A57B45361B1A2B4500F461EE /* RobotCommander.h */,
+				A57B45371B1A2B4500F461EE /* RobotCommander.m */,
 				A545FB2D1B188A7F0095F9EE /* ViewController.xib */,
 				A55BFABC1B186E350011296F /* Supporting Files */,
+				A539F7731B19CED300630F15 /* Resources */,
 			);
 			path = RobotController;
 			sourceTree = "<group>";
@@ -177,9 +207,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A57B45341B1A1CB100F461EE /* power_button_off.png in Resources */,
+				A539F7771B19CED300630F15 /* Default@2x.png in Resources */,
+				A57B45351B1A1CB100F461EE /* power_button_on.png in Resources */,
 				A545FB3C1B1896E20095F9EE /* joystick_seat.png in Resources */,
 				A545FB2E1B188A7F0095F9EE /* ViewController.xib in Resources */,
 				A545FB3F1B1897AD0095F9EE /* joystick_stick.png in Resources */,
+				A539F7761B19CED300630F15 /* Default-568h@2x.png in Resources */,
 				A55BFACA1B186E350011296F /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -192,7 +226,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A55BFAC51B186E350011296F /* ViewController.m in Sources */,
+				A57B45311B1A1C9E00F461EE /* PowerButton.m in Sources */,
 				A55BFAC21B186E350011296F /* AppDelegate.m in Sources */,
+				A57B45381B1A2B4500F461EE /* RobotCommander.m in Sources */,
 				A545FB391B188F7A0095F9EE /* JoystickView.m in Sources */,
 				A55BFABF1B186E350011296F /* main.m in Sources */,
 				A545FB361B188F300095F9EE /* JoystickController.m in Sources */,
@@ -283,9 +319,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RobotController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "C0A486DB-79C5-445A-B8DD-5AA6C6B7D247";
+				PROVISIONING_PROFILE = "69706c5b-12f4-499b-9ed4-3259f0f472d9";
 			};
 			name = Debug;
 		};
@@ -294,9 +331,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RobotController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "C0A486DB-79C5-445A-B8DD-5AA6C6B7D247";
+				PROVISIONING_PROFILE = "69706c5b-12f4-499b-9ed4-3259f0f472d9";
 			};
 			name = Release;
 		};
