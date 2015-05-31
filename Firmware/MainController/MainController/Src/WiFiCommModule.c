@@ -25,6 +25,7 @@
 // Min data length for commands
 #define ROBOT_CMD_SET_CHANNEL_MDL       4
 #define ROBOT_CMD_SET_LIN_VEL_MDL       2
+#define ROBOT_CMD_SET_LAT_VEL_MDL       2
 #define ROBOT_CMD_SET_ANG_VEL_MDL       2
 #define ROBOT_CMD_SET_MODE_MDL          2
 
@@ -534,8 +535,9 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
             if (address == remote_client_address && port == remote_client_port)
             {
                 // Send response Ok.
-                tx_packet[0] = WF_CMD_OK;
-                tx_packet_length = 1;
+                tx_packet[0] = robotCmd;
+                tx_packet[1] = WF_CMD_OK;
+                tx_packet_length = 2;
                 
                 current_client_endpoint = remote_client_endpoint;
                 
@@ -564,14 +566,16 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
                     xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 
                     // Send response Ok.
-                    tx_packet[0] = WF_CMD_OK;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_OK;
+                    tx_packet_length = 2;
                 }
                 else
                 {
                     // Send response Fail.
-                    tx_packet[0] = WF_CMD_ERROR;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_ERROR;
+                    tx_packet_length = 2;
                 }                
                 
                 current_client_endpoint = remote_client_endpoint;
@@ -603,14 +607,16 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
                     xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 
                     // Send response Ok.
-                    tx_packet[0] = WF_CMD_OK;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_OK;
+                    tx_packet_length = 2;
                 }
                 else
                 {
                     // Send response Fail.
-                    tx_packet[0] = WF_CMD_ERROR;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_ERROR;
+                    tx_packet_length = 2;
                 }                
                 
                 current_client_endpoint = remote_client_endpoint;
@@ -639,14 +645,16 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
                     xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 
                     // Send response Ok.
-                    tx_packet[0] = WF_CMD_OK;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_OK;
+                    tx_packet_length = 2;
                 }
                 else
                 {
                     // Send response Fail.
-                    tx_packet[0] = WF_CMD_ERROR;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_ERROR;
+                    tx_packet_length = 2;
                 }                
                 
                 current_client_endpoint = remote_client_endpoint;
@@ -660,8 +668,8 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
             
             break;
             
-        case WF_ROBOT_SET_LINEAR_VELOCITY:
-            //Client requests to set robots linear velocity value.
+        case WF_ROBOT_SET_STRAIGHT_VELOCITY:
+            //Client requests to set robots straight movement velocity value.
         
             if (address == remote_client_address && port == remote_client_port)
             {
@@ -675,14 +683,16 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
                     xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 
                     // Send response Ok.
-                    tx_packet[0] = WF_CMD_OK;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_OK;
+                    tx_packet_length = 2;
                 }
                 else
                 {
                     // Send response Fail.
-                    tx_packet[0] = WF_CMD_ERROR;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_ERROR;
+                    tx_packet_length = 2;
                 }                
                 
                 current_client_endpoint = remote_client_endpoint;
@@ -696,6 +706,44 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
             
             break;
             
+        case WF_ROBOT_SET_LATERAL_VELOCITY:
+            //Client requests to set robots lateral movement velocity value.
+        
+            if (address == remote_client_address && port == remote_client_port)
+            {
+                if (dataLength >= ROBOT_CMD_SET_LIN_VEL_MDL)
+                {
+                    cmdData = &data[1];
+                
+                    // Data comes in Little-endian format.
+                    WF_Robo_Packet *packet =  WF_CreateRobotPacket(robotCmd, cmdData, ROBOT_CMD_SET_LAT_VEL_MDL - 1);
+                    // Send data to main thread.
+                    xQueueSend(udpQueue, &packet, portMAX_DELAY);
+                
+                    // Send response Ok.
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_OK;
+                    tx_packet_length = 2;
+                }
+                else
+                {
+                    // Send response Fail.
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_ERROR;
+                    tx_packet_length = 2;
+                }                
+                
+                current_client_endpoint = remote_client_endpoint;
+                
+                goto_state(wlan_state_udp_send_response);
+            }
+            else
+            {
+                goto_state(wlan_state_idle);
+            }
+            
+            break;
+                              
         case WF_ROBOT_SET_ANGULAR_VELOCITY:
             //Client requests to set robots angular velocity value.
         
@@ -711,14 +759,16 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
                     xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 
                     // Send response Ok.
-                    tx_packet[0] = WF_CMD_OK;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_OK;
+                    tx_packet_length = 2;
                 }
                 else
                 {
                     // Send response Fail.
-                    tx_packet[0] = WF_CMD_ERROR;
-                    tx_packet_length = 1;
+                    tx_packet[0] = robotCmd;
+                    tx_packet[1] = WF_CMD_ERROR;
+                    tx_packet_length = 2;
                 }
                 
                 current_client_endpoint = remote_client_endpoint;
@@ -742,8 +792,9 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
                 xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 
                 // Send response Ok.
-                tx_packet[0] = WF_CMD_OK;
-                tx_packet_length = 1;
+                tx_packet[0] = robotCmd;
+                tx_packet[1] = WF_CMD_OK;
+                tx_packet_length = 2;
                     
                 current_client_endpoint = remote_client_endpoint;
                 
@@ -781,21 +832,23 @@ void WF_ClientEndpointCreated (uint8_t endpoint)
             remote_client_endpoint = endpoint;
 
             // Send response Ok.
-            tx_packet[0] = WF_CMD_OK;
-            tx_packet_length = 1;
+            tx_packet[0] = robotCmd;
+            tx_packet[1] = WF_CMD_OK;
+            tx_packet_length = 2;
         }
         else
         {
             // Send response Fail with current
             // remote cliend data.
-            tx_packet[0] = WF_CMD_ERROR;
-            tx_packet[1] = (uint8_t)(remote_client_address >> 24);
-            tx_packet[2] = (uint8_t)(remote_client_address >> 16);
-            tx_packet[3] = (uint8_t)(remote_client_address >> 8); 
-            tx_packet[4] = (uint8_t)remote_client_address;
-            tx_packet[5] = (uint8_t)(remote_client_port >> 8);
-            tx_packet[6] = (uint8_t)remote_client_port;
-            tx_packet_length = 7;
+            tx_packet[0] = robotCmd;
+            tx_packet[1] = WF_CMD_ERROR;
+            tx_packet[2] = (uint8_t)(remote_client_address >> 24);
+            tx_packet[3] = (uint8_t)(remote_client_address >> 16);
+            tx_packet[4] = (uint8_t)(remote_client_address >> 8); 
+            tx_packet[5] = (uint8_t)remote_client_address;
+            tx_packet[6] = (uint8_t)(remote_client_port >> 8);
+            tx_packet[7] = (uint8_t)remote_client_port;
+            tx_packet_length = 8;
         }
         
         // Reset temp variables.
