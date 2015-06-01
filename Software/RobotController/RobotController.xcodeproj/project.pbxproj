@@ -18,6 +18,11 @@
 		A55BFAC21B186E350011296F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC11B186E350011296F /* AppDelegate.m */; };
 		A55BFAC51B186E350011296F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BFAC41B186E350011296F /* ViewController.m */; };
 		A55BFACA1B186E350011296F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A55BFAC91B186E350011296F /* Images.xcassets */; };
+		A5726CA21B1C5C8A00550DAF /* backMetalPerfored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5726CA11B1C5C8A00550DAF /* backMetalPerfored@2x.png */; };
+		A5726CA41B1C5EDA00550DAF /* backGrayAbstract@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5726CA31B1C5EDA00550DAF /* backGrayAbstract@2x.png */; };
+		A5726CA61B1C6ABA00550DAF /* settingsButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5726CA51B1C6ABA00550DAF /* settingsButton@2x.png */; };
+		A5726CA91B1C707C00550DAF /* DirectControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5726CA81B1C707C00550DAF /* DirectControlViewController.m */; };
+		A5726CAB1B1C75E500550DAF /* closeButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5726CAA1B1C75E500550DAF /* closeButton@2x.png */; };
 		A57B45311B1A1C9E00F461EE /* PowerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A57B45301B1A1C9E00F461EE /* PowerButton.m */; };
 		A57B45341B1A1CB100F461EE /* power_button_off.png in Resources */ = {isa = PBXBuildFile; fileRef = A57B45321B1A1CB100F461EE /* power_button_off.png */; };
 		A57B45351B1A1CB100F461EE /* power_button_on.png in Resources */ = {isa = PBXBuildFile; fileRef = A57B45331B1A1CB100F461EE /* power_button_on.png */; };
@@ -44,6 +49,12 @@
 		A55BFAC91B186E350011296F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A55BFAD71B186E360011296F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A55BFAD81B186E360011296F /* RobotControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RobotControllerTests.m; sourceTree = "<group>"; };
+		A5726CA11B1C5C8A00550DAF /* backMetalPerfored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backMetalPerfored@2x.png"; sourceTree = "<group>"; };
+		A5726CA31B1C5EDA00550DAF /* backGrayAbstract@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backGrayAbstract@2x.png"; sourceTree = "<group>"; };
+		A5726CA51B1C6ABA00550DAF /* settingsButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingsButton@2x.png"; sourceTree = "<group>"; };
+		A5726CA71B1C707C00550DAF /* DirectControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectControlViewController.h; sourceTree = "<group>"; };
+		A5726CA81B1C707C00550DAF /* DirectControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectControlViewController.m; sourceTree = "<group>"; };
+		A5726CAA1B1C75E500550DAF /* closeButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closeButton@2x.png"; sourceTree = "<group>"; };
 		A57B452F1B1A1C9E00F461EE /* PowerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PowerButton.h; sourceTree = "<group>"; };
 		A57B45301B1A1C9E00F461EE /* PowerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PowerButton.m; sourceTree = "<group>"; };
 		A57B45321B1A1CB100F461EE /* power_button_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = power_button_off.png; sourceTree = "<group>"; };
@@ -66,6 +77,10 @@
 		A539F7731B19CED300630F15 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A5726CAA1B1C75E500550DAF /* closeButton@2x.png */,
+				A5726CA51B1C6ABA00550DAF /* settingsButton@2x.png */,
+				A5726CA31B1C5EDA00550DAF /* backGrayAbstract@2x.png */,
+				A5726CA11B1C5C8A00550DAF /* backMetalPerfored@2x.png */,
 				A539F7741B19CED300630F15 /* Default-568h@2x.png */,
 				A539F7751B19CED300630F15 /* Default@2x.png */,
 			);
@@ -114,6 +129,8 @@
 				A55BFAC11B186E350011296F /* AppDelegate.m */,
 				A55BFAC31B186E350011296F /* ViewController.h */,
 				A55BFAC41B186E350011296F /* ViewController.m */,
+				A5726CA71B1C707C00550DAF /* DirectControlViewController.h */,
+				A5726CA81B1C707C00550DAF /* DirectControlViewController.m */,
 				A57B45361B1A2B4500F461EE /* RobotCommander.h */,
 				A57B45371B1A2B4500F461EE /* RobotCommander.m */,
 				A545FB2D1B188A7F0095F9EE /* ViewController.xib */,
@@ -207,14 +224,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5726CA41B1C5EDA00550DAF /* backGrayAbstract@2x.png in Resources */,
+				A5726CA21B1C5C8A00550DAF /* backMetalPerfored@2x.png in Resources */,
 				A57B45341B1A1CB100F461EE /* power_button_off.png in Resources */,
 				A539F7771B19CED300630F15 /* Default@2x.png in Resources */,
 				A57B45351B1A1CB100F461EE /* power_button_on.png in Resources */,
+				A5726CAB1B1C75E500550DAF /* closeButton@2x.png in Resources */,
 				A545FB3C1B1896E20095F9EE /* joystick_seat.png in Resources */,
 				A545FB2E1B188A7F0095F9EE /* ViewController.xib in Resources */,
 				A545FB3F1B1897AD0095F9EE /* joystick_stick.png in Resources */,
 				A539F7761B19CED300630F15 /* Default-568h@2x.png in Resources */,
 				A55BFACA1B186E350011296F /* Images.xcassets in Resources */,
+				A5726CA61B1C6ABA00550DAF /* settingsButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +249,7 @@
 				A55BFAC51B186E350011296F /* ViewController.m in Sources */,
 				A57B45311B1A1C9E00F461EE /* PowerButton.m in Sources */,
 				A55BFAC21B186E350011296F /* AppDelegate.m in Sources */,
+				A5726CA91B1C707C00550DAF /* DirectControlViewController.m in Sources */,
 				A57B45381B1A2B4500F461EE /* RobotCommander.m in Sources */,
 				A545FB391B188F7A0095F9EE /* JoystickView.m in Sources */,
 				A55BFABF1B186E350011296F /* main.m in Sources */,

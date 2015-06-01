@@ -10,11 +10,13 @@
 
 #import "JoystickController.h"
 #import "PowerButton.h"
+#import "DirectControlViewController.h"
 #import "RobotCommander.h"
 
-@interface ViewController : UIViewController <RobotCommanderProtocol>
+@interface ViewController : UIViewController <RobotCommanderProtocol, DirectControlScreenDelegate>
 
 @property (nonatomic, strong) PowerButton *powerButton;
+@property (nonatomic, strong) UIButton *settingsButton;
 @property (nonatomic, strong) JoystickController *joystickLeft;
 @property (nonatomic, strong) JoystickController *joystickRight;
 @property (nonatomic, strong) RobotCommander *robotCommander;

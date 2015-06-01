@@ -21,9 +21,12 @@
 #define LEFT_JOYSTICK_POSITION_CALC(S)      CGPointMake(S.width * 0.2f, S.height * 0.65f)
 #define RIGHT_JOYSTICK_POSITION_CALC(S)     CGPointMake(S.width * 0.8f, S.height * 0.65f)
 #define POWER_BUTTON_POSITION_CALC(S)       CGPointMake(S.width * 0.5f, S.height * 0.3f)
+#define SETTINGS_BUTTON_POSITION_CALC(S)    CGPointMake(S.width * 0.955f, S.height * 0.065f)
 
-#define JOYSTICK_SCALE        8.0f
+#define JOYSTICK_SCALE          8.0f
 
+#define MIN_SERVO_PULSE_WIDTH         1000
+#define MAX_SERVO_PULSE_WIDTH         2000
 
 @interface ViewController ()
 {
@@ -59,8 +62,15 @@
     CGSize s = [UIScreen mainScreen].bounds.size;
     
     // Set view size to fit screen.
-    self.view.frame = CGRectMake(0, 0, s.width, s.height);
-    self.view.backgroundColor = [UIColor orangeColor];
+    self.view.frame = CGRectMake(0.f, 0.f, s.width, s.height);
+    self.view.backgroundColor = [UIColor grayColor];
+    
+    UIImage *backImage = [UIImage imageNamed:@"backGrayAbstract.png"];
+    UIImageView *backView = [[UIImageView alloc] initWithImage:backImage];
+    backView.frame = CGRectMake(0.f, 0.f, backImage.size.width, backImage.size.height);
+    CGPoint center = CGPointMake(s.width * 0.5f, s.height * 0.5f);
+    backView.center = center;
+    [self.view addSubview:backView];
     
     // Power button.
     self.powerButton = [[PowerButton alloc] init];
@@ -79,6 +89,16 @@
     [self.view addSubview:self.joystickLeft.view];
     [self.view addSubview:self.joystickRight.view];
     
+    // Settings button.
+    self.settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *setBtnImg = [UIImage imageNamed:@"settingsButton@2x.png"];
+    [self.settingsButton setImage:setBtnImg forState:UIControlStateNormal];
+    self.settingsButton.frame = CGRectMake(0, 0, setBtnImg.size.width, setBtnImg.size.height);
+    self.settingsButton.center = SETTINGS_BUTTON_POSITION_CALC(s);
+    [self.view addSubview:self.settingsButton];
+    self.settingsButton.enabled = self.connected;
+    [self.settingsButton addTarget:self action:@selector(settingsButtonPressed:)
+                  forControlEvents:UIControlEventTouchUpInside];
     
     // Robot controller.
     self.robotCommander = [[RobotCommander alloc] initWithRobotAddress:ROBOT_ADDRESS robotPort:ROBOT_PORT
@@ -92,6 +112,36 @@
     curVelAngular = 0;
     curVelLateral = 0;
     curVelStraight = 0;
+}
+
+#pragma mark - Settings button callback
+
+- (void)settingsButtonPressed:(UIButton *)button
+{
+    if (self.connected)
+    {
+        RobotRequest *request = [RobotCommander requestToSetControlMode:RCM_DIRECT_SERVO_MODE];
+        
+        [self.robotCommander sendRequest:request];
+    }
+}
+
+#pragma mark - Direct control screen callbacks
+
+- (void)closeButtonPressed:(UIButton *)button
+{
+    RobotRequest *request = [RobotCommander requestToSetControlMode:RCM_NORMAL_MODE];
+    
+    [self.robotCommander sendRequest:request];
+}
+
+- (void)sliderSet:(UISlider *)slider
+{
+    uint8_t channelId = slider.tag;
+    uint16_t value = slider.value;
+    
+    RobotRequest *request = [RobotCommander requestToSetChannel:channelId withValue:value];
+    [self.robotCommander sendRequest:request];
 }
 
 #pragma mark - Joysticks callbacks
@@ -174,11 +224,42 @@
             }
             
             self.powerButton.powerOn = self.connected;
+            self.settingsButton.enabled = self.connected;
             
             break;
+            
         case WF_ROBOT_DROP_CONTROL:
             
             self.connected = NO;
+            self.settingsButton.enabled = self.connected;
+            
+            break;
+            
+        case WF_ROBOT_SET_CONTROL_MODE:
+            
+            if (status == WF_CMD_OK)
+            {
+                ROBOT_CONTROL_MODE mode = data[2];
+                
+                if (mode == RCM_NORMAL_MODE)
+                {
+                    UIWindow *window = [UIApplication sharedApplication].windows[0];
+                    [window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+                }
+                else
+                {
+                    DirectControlViewController *vc = [[DirectControlViewController alloc] init];
+                    vc.minSliderValue = MIN_SERVO_PULSE_WIDTH;
+                    vc.maxSliderValue = MAX_SERVO_PULSE_WIDTH;
+                    vc.delegate = self;
+                    vc.view.frame = self.view.frame;
+                    
+                    UIWindow *window = [UIApplication sharedApplication].windows[0];
+                    [window.rootViewController presentViewController:vc animated:YES completion:nil];
+                }
+            }
+            
+            break;
             
         default:
             break;
@@ -194,6 +275,7 @@
             
             self.connected = NO;
             self.powerButton.powerOn = self.connected;
+            self.settingsButton.enabled = self.connected;
             
             break;
             
@@ -218,6 +300,7 @@
             
             self.connected = NO;
             self.powerButton.powerOn = self.connected;
+            self.settingsButton.enabled = self.connected;
             
             break;
             
