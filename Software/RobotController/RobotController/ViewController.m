@@ -11,15 +11,39 @@
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 
+
 #define ROBOT_ADDRESS           @"192.168.1.1"
 #define ROBOT_PORT              49001
 #define CLIENT_PORT             49002
+
+#define FAIL_REQUESTS_NUMBER_TO_STOP    5
 
 #define LEFT_JOYSTICK_POSITION_CALC(S)      CGPointMake(S.width * 0.2f, S.height * 0.65f)
 #define RIGHT_JOYSTICK_POSITION_CALC(S)     CGPointMake(S.width * 0.8f, S.height * 0.65f)
 #define POWER_BUTTON_POSITION_CALC(S)       CGPointMake(S.width * 0.5f, S.height * 0.3f)
 
+#define JOYSTICK_SCALE        8.0f
+
+
 @interface ViewController ()
+{
+    uint8_t failedRequestsCounter;
+    
+    // We assume that robot receives
+    // relative velocities values in
+    // range -8 .. +8. Joystick has much
+    // more bigger resolution and every
+    // callback from it has "new" position
+    // value even if it changed for example
+    // by 0.001. Every callback generates
+    // request - it's to often.
+    // To prevent too often request store
+    // values to check if new value
+    // from joystick is changed.
+    int8_t curVelStraight;
+    int8_t curVelLateral;
+    int8_t curVelAngular;
+}
 
 @property (nonatomic) BOOL connected;
 
@@ -57,20 +81,55 @@
     
     
     // Robot controller.
-    self.robotCommander = [[RobotCommander alloc] initWithRobotAddress:ROBOT_ADDRESS robotPort:ROBOT_PORT clientPort:CLIENT_PORT];
+    self.robotCommander = [[RobotCommander alloc] initWithRobotAddress:ROBOT_ADDRESS robotPort:ROBOT_PORT
+                                                            clientPort:CLIENT_PORT];
+    self.robotCommander.commTimeout = 200;
     self.robotCommander.delegate = self;
     self.connected = NO;
+    
+    failedRequestsCounter = 0;
+    
+    curVelAngular = 0;
+    curVelLateral = 0;
+    curVelStraight = 0;
 }
+
+#pragma mark - Joysticks callbacks
 
 - (void)leftJoystickTilt:(JoystickTilt *)tilt
 {
-    NSLog(@"#Left : %f, %f", tilt.pitch, tilt.roll);
+    int8_t velStraight = (int8_t)((float)tilt.roll * JOYSTICK_SCALE);
+    int8_t velLateral = (int8_t)((float)tilt.pitch * JOYSTICK_SCALE);
+    
+    if ((curVelStraight != velStraight || curVelLateral != velLateral) && self.connected)
+    {
+        curVelStraight = velStraight;
+        RobotRequest *setStrVelReq = [RobotCommander requestToSetStraightVelocity:velStraight];
+        [self.robotCommander sendRequest:setStrVelReq];
+
+        curVelLateral = velLateral;
+        RobotRequest *setLatVelReq = [RobotCommander requestToSetLateralVelocity:velLateral];
+        [self.robotCommander sendRequest:setLatVelReq];
+        
+        NSLog(@"#Left : %hhi, %hhi", velLateral, velStraight);
+    }
 }
 
 - (void)rightJoystickTilt:(JoystickTilt *)tilt
 {
-    NSLog(@"#Right : %f, %f", tilt.pitch, tilt.roll);
+    int8_t velAngular = (int8_t)((float)tilt.pitch * JOYSTICK_SCALE);
+    
+    if (curVelAngular != velAngular && self.connected)
+    {
+        curVelAngular = velAngular;
+        RobotRequest *setVelAngReq = [RobotCommander requestToSetAngularVelocity:velAngular];
+        [self.robotCommander sendRequest:setVelAngReq];
+        
+        NSLog(@"#Right : %hhi", velAngular);
+    }
 }
+
+#pragma mark - Power button callback
 
 - (void)powerButtonPressed:(PowerButton *)button
 {
@@ -89,6 +148,92 @@
     
     [self.robotCommander sendRequest:req];
 }
+
+#pragma mark - Robot communication callbacks
+
+- (void)request:(RobotRequest *)request didReceiveResponse:(RobotResponse *)response
+{
+    uint8_t *data = (uint8_t *)response.data.bytes;
+    WF_COMMAND_STATUS status = data[1];
+    
+    switch (response.command)
+    {
+        case WF_ROBOT_TAKE_CONTROL:
+            
+            if (status == WF_CMD_OK)
+            {
+                self.connected = YES;
+            }
+            else
+            {
+                // Robot sends ip and port of connected client
+                // in case of command error. Check if this ip
+                // and port are ours. Maybe we have already
+                // connected to the robot earlier.
+                self.connected = [self parseAndCheckIsItMe:&data[2] port:&data[6]] ? YES : NO;
+            }
+            
+            self.powerButton.powerOn = self.connected;
+            
+            break;
+        case WF_ROBOT_DROP_CONTROL:
+            
+            self.connected = NO;
+            
+        default:
+            break;
+    }
+}
+
+- (void)requestDidFail:(RobotRequest *)request
+{
+    switch (request.command)
+    {
+        case WF_ROBOT_TAKE_CONTROL:
+        case WF_ROBOT_DROP_CONTROL:
+            
+            self.connected = NO;
+            self.powerButton.powerOn = self.connected;
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    // Stop sending requests as robot may be offline.
+    if (++failedRequestsCounter > FAIL_REQUESTS_NUMBER_TO_STOP)
+    {
+        [self.robotCommander cancelPreviousRequests];
+        failedRequestsCounter = 0;
+    }
+}
+
+- (void)requestDidTimeOut:(RobotRequest *)request
+{
+    switch (request.command)
+    {
+        case WF_ROBOT_TAKE_CONTROL:
+        case WF_ROBOT_DROP_CONTROL:
+            
+            self.connected = NO;
+            self.powerButton.powerOn = self.connected;
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    // Stop sending requests as robot may be offline.
+    if (++failedRequestsCounter > FAIL_REQUESTS_NUMBER_TO_STOP)
+    {
+        [self.robotCommander cancelPreviousRequests];
+        failedRequestsCounter = 0;
+    }
+}
+
+#pragma mark - Utils
 
 - (NSString *)getIPAddress {
     
@@ -121,88 +266,25 @@
     
 }
 
-- (BOOL)parseAndCheckIsItMe:(uint8_t *)data
+- (BOOL)parseAndCheckIsItMe:(uint8_t *)addressData port:(uint8_t *)portData
 {
-    NSString *ip = [NSString stringWithFormat:@"%hhu.%hhu.%hhu.%hhu", data[3], data[2], data[1], data[0]];
-    uint16_t port = (uint16_t)data[4];
-    port |= (uint16_t)data[5] << 8;
+    // Calc IP from data.
+    NSString *ip = [NSString stringWithFormat:@"%hhu.%hhu.%hhu.%hhu", addressData[3], addressData[2],
+                                                                        addressData[1], addressData[0]];
+    // Calc port from data.
+    uint16_t port = (uint16_t)portData[0];
+    port |= (uint16_t)portData[1] << 8;
     
+    // Detect my WiFi IP.
     NSString *myIp = [self getIPAddress];
     
+    // Is data equal to me?
     if ([ip isEqualToString:myIp] && port == CLIENT_PORT)
     {
         return YES;
     }
     
     return NO;
-}
-
-- (void)request:(RobotRequest *)request didReceiveResponse:(RobotResponse *)response
-{
-    uint8_t *data = (uint8_t *)response.data.bytes;
-    WF_COMMAND_STATUS status = data[1];
-    
-    switch (response.command)
-    {
-        case WF_ROBOT_TAKE_CONTROL:
-            
-            if (status == WF_CMD_OK)
-            {
-                self.connected = YES;
-            }
-            else
-            {
-                // Robot sends ip and port of connected client
-                // in case of command error. Check if this ip
-                // and port are ours. Maybe we connected to the
-                // robot earlier.
-                self.connected = [self parseAndCheckIsItMe:&data[2]] ? YES : NO;
-            }
-            
-            self.powerButton.powerOn = self.connected;
-            
-            break;
-        case WF_ROBOT_DROP_CONTROL:
-            
-            self.connected = NO;
-            
-        default:
-            break;
-    }
-}
-
-- (void)requestDidFail:(RobotRequest *)request
-{
-    switch (request.command)
-    {
-        case WF_ROBOT_TAKE_CONTROL:
-        case WF_ROBOT_DROP_CONTROL:
-            
-            self.connected = NO;
-            self.powerButton.powerOn = self.connected;
-            
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)requestDidTimeOut:(RobotRequest *)request
-{
-    switch (request.command)
-    {
-        case WF_ROBOT_TAKE_CONTROL:
-        case WF_ROBOT_DROP_CONTROL:
-            
-            self.connected = NO;
-            self.powerButton.powerOn = self.connected;
-            
-            break;
-            
-        default:
-            break;
-    }
 }
 
 @end

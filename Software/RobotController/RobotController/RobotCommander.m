@@ -38,7 +38,8 @@
 }
 
 @property (nonatomic, strong) NSThread *commThread;
-@property (nonatomic, strong) NSMutableArray *requests;
+@property (nonatomic, strong) NSMutableArray *requestsQueue;
+@property (nonatomic, strong) RobotRequest *currentRequest;
 
 @end
 
@@ -53,7 +54,7 @@
         _clientPort = clientPort;
         _commTimeout = 100;
         
-        self.requests = [[NSMutableArray alloc] init];
+        self.requestsQueue = [[NSMutableArray alloc] init];
         
         robotAddr = nil;
         clientAddr = nil;
@@ -187,6 +188,52 @@
     return res;
 }
 
+- (void)sendNextRequestFromQueue
+{
+    if (self.requestsQueue.count > 0)
+    {
+        RobotRequest *request = self.requestsQueue[0];
+        
+        self.currentRequest = request;
+        
+        // Create new thread.
+        NSThread *commThread = [[NSThread alloc] initWithTarget:self selector:@selector(sendDatagramWithRequest:) object:request];
+        [commThread start];
+    }
+    else
+    {
+        self.currentRequest = nil;
+    }
+}
+
+- (void)cancelPreviousRequests
+{
+    [self.requestsQueue removeAllObjects];
+}
+
+- (void)sendRequest:(RobotRequest *)request
+{
+    if (!request)
+    {
+        return;
+    }
+    
+    [self.requestsQueue addObject:request];
+    
+    // Return if any request is already in progress.
+    // Perform requests continuosly.
+    if (self.requestsQueue.count > 1)
+    {
+        return;
+    }
+    
+    self.currentRequest = request;
+    
+    // Create new thread.
+    NSThread *commThread = [[NSThread alloc] initWithTarget:self selector:@selector(sendDatagramWithRequest:) object:request];
+    [commThread start];
+}
+
 - (BOOL)createSocketForAddress:(NSString *)ip port:(uint16_t)port withSourcePort:(uint16_t)sourcePort
 {
     // Create UDP socket.
@@ -235,20 +282,6 @@
     return YES;
 }
 
-- (void)sendRequest:(RobotRequest *)request
-{
-    if (!request)
-    {
-        return;
-    }
-    
-    [self.requests addObject:request];
-    
-    // Create new thread.
-    NSThread *commThread = [[NSThread alloc] initWithTarget:self selector:@selector(sendDatagramWithRequest:) object:request];
-    [commThread start];
-}
-
 - (void)sendDatagramWithRequest:(RobotRequest *)request
 {
     uint8_t buffer[100];
@@ -257,9 +290,10 @@
     
     if (![self createSocketForAddress:self.robotIP port:self.robotPort withSourcePort:self.clientPort])
     {
+        [self freeResources];
+        
         [self performSelectorOnMainThread:@selector(requestFailed:) withObject:request waitUntilDone:YES];
         
-        [self freeResources];
         [NSThread exit];
     }
     
@@ -271,9 +305,10 @@
     
     if (res == -1)
     {
+        [self freeResources];
+        
         [self performSelectorOnMainThread:@selector(requestFailed:) withObject:request waitUntilDone:YES];
         
-        [self freeResources];
         [NSThread exit];
     }
     
@@ -282,9 +317,10 @@
 
     if (res == -1)
     {
+        [self freeResources];
+        
         [self performSelectorOnMainThread:@selector(requestTimeout:) withObject:request waitUntilDone:YES];
         
-        [self freeResources];
         [NSThread exit];
     }
     else
@@ -294,6 +330,8 @@
         response.data = [NSData dataWithBytes:buffer length:res];
         response.length = (uint32_t)res;
         
+        [self freeResources];
+        
         [self performSelectorOnMainThread:@selector(requestReceivedResponse:)
                                withObject:@{
                                                 @"request" : request,
@@ -301,7 +339,6 @@
                                             }
                             waitUntilDone:YES];
         
-        [self freeResources];
         [NSThread exit];
     }
 }
@@ -315,9 +352,11 @@
         [self.delegate requestDidTimeOut:request];
     }
     
-    [self.requests removeObject:request];
+    [self.requestsQueue removeObject:request];
     
     self.commThread = nil;
+    
+    [self sendNextRequestFromQueue];
 }
 
 - (void)requestReceivedResponse:(NSDictionary *)data
@@ -332,9 +371,11 @@
         [self.delegate request:request didReceiveResponse:response];
     }
     
-    [self.requests removeObject:request];
+    [self.requestsQueue removeObject:request];
     
     self.commThread = nil;
+    
+    [self sendNextRequestFromQueue];
 }
 
 - (void)requestFailed:(RobotRequest *)request
@@ -346,9 +387,11 @@
         [self.delegate requestDidFail:request];
     }
     
-    [self.requests removeObject:request];
+    [self.requestsQueue removeObject:request];
     
     self.commThread = nil;
+    
+    [self sendNextRequestFromQueue];
 }
 
 - (void)freeResources

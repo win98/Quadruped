@@ -69,8 +69,16 @@ typedef enum
 
 + (RobotRequest *)requestToConnect;
 + (RobotRequest *)requestToDisconnect;
++ (RobotRequest *)requestToSetChannel:(uint8_t)channel withValue:(uint16_t)value;
++ (RobotRequest *)requestToSetChannels:(uint16_t *)values channelsTotal:(uint8_t)count;
++ (RobotRequest *)requestToSetControlMode:(ROBOT_CONTROL_MODE)mode;
++ (RobotRequest *)requestToSetStraightVelocity:(int8_t)velocity;
++ (RobotRequest *)requestToSetLateralVelocity:(int8_t)velocity;
++ (RobotRequest *)requestToSetAngularVelocity:(int8_t)velocity;
++ (RobotRequest *)requestToPing;
 
 - (id)initWithRobotAddress:(NSString *)robotAddress robotPort:(uint16_t)robotPort clientPort:(uint16_t)clientPort;
 - (void)sendRequest:(RobotRequest *)request;
+- (void)cancelPreviousRequests;
 
 @end
