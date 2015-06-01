@@ -48,6 +48,11 @@ osThreadId wfCommTaskHandle;
 
 xQueueHandle wfQueue;
 
+ROBOT_CONTROL_MODE controlMode;
+int8_t straightVelocity;
+int8_t lateralVelocity;
+int8_t angularVelocity;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -94,6 +99,11 @@ int main(void)
     
     
     SERVO_PROTOCOL_Init();
+    
+    straightVelocity = 0;
+    lateralVelocity = 0;
+    angularVelocity = 0;
+    
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -136,24 +146,12 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    uint16_t data[30];
   while (1)
   {
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-        for (uint16_t i = 1000; i <= 2500; i += 100)
-        {
-            data[0] = 0x3C0;//i;
-            SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNEL, 23, data, 1);
-            HAL_Delay(100);
-        }
-        for (uint16_t i = 2400; i > 1000; i -= 100)
-        {
-            data[0] = 0x3C0;//i;
-            SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNEL, 23, data, 1);
-            HAL_Delay(100);
-        }
+
   }
   /* USER CODE END 3 */
 
@@ -281,6 +279,10 @@ void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
     WF_Robo_Packet *packet;
+    uint8_t channel;
+    uint8_t value;
+    int8_t value_s;
+    uint16_t *data16;
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
     for(;;)
@@ -289,6 +291,65 @@ void StartDefaultTask(void const * argument)
         
         // Process packet here
         //!!!!!!!!!!!!!!!!
+        switch (packet->cmd)
+        {
+            case WF_ROBOT_SET_CHANNEL:
+                if (controlMode == RCM_DIRECT_SERVO_MODE)
+                {
+                    channel = packet->data[0];  //Number of channel
+                    data16 = (uint16_t *)(&packet->data[1]);
+                    SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNEL, channel, data16, 1);
+                }
+                
+                break;
+                
+            case WF_ROBOT_SET_CHANNELS:
+                if (controlMode == RCM_DIRECT_SERVO_MODE)
+                {
+                    channel = packet->data[0];  //Number of channels values
+                    data16 = (uint16_t *)(&packet->data[1]);
+                    SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNEL, channel, data16, channel);
+                }
+                
+                break;
+                
+            case WF_ROBOT_SET_CONTROL_MODE:
+                value = packet->data[0];    //Mode
+                controlMode = (ROBOT_CONTROL_MODE)value;
+                
+                break;
+                
+            case WF_ROBOT_SET_STRAIGHT_VELOCITY:
+                value_s = (int8_t)packet->data[0];
+                if (value_s >= -8 && value_s <= 8)
+                {
+                    straightVelocity = value_s;
+                }
+                
+                break;
+                
+            case WF_ROBOT_SET_LATERAL_VELOCITY:
+                value_s = (int8_t)packet->data[0];
+                if (value_s >= -8 && value_s <= 8)
+                {
+                    lateralVelocity = value_s;
+                }
+                
+                break;
+            
+            case WF_ROBOT_SET_ANGULAR_VELOCITY:
+                value_s = (int8_t)packet->data[0];
+                if (value_s >= -8 && value_s <= 8)
+                {
+                    angularVelocity = value_s;
+                }
+                
+                break;
+                
+            default:
+                break;
+        }
+        
         
         WF_RobotPacketProcessed (packet);
         

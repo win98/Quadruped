@@ -595,7 +595,7 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
             if (address == remote_client_address && port == remote_client_port)
             {
                 uint8_t channelsNum = data[1];
-                uint8_t minLength = 1 + channelsNum * 2;
+                uint8_t minLength = 2 + channelsNum * 2;
                 
                 if (dataLength >= minLength)
                 {
