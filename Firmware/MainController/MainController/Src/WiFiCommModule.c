@@ -647,7 +647,8 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
                     // Send response Ok.
                     tx_packet[0] = robotCmd;
                     tx_packet[1] = WF_CMD_OK;
-                    tx_packet_length = 2;
+                    tx_packet[2] = cmdData[0];
+                    tx_packet_length = 3;
                 }
                 else
                 {
