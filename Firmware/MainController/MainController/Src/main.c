@@ -55,6 +55,13 @@ int8_t angularVelocity;
 
 /* USER CODE BEGIN PV */
 
+#define SERVO_CHANNELS_NUMBER       24
+
+#define WIFI_RESET_PORT     GPIOB
+#define WIFI_RESET_PIN      GPIO_PIN_15
+
+#define DEFAULT_SERVO_POSITION_PULSE    1500
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -89,17 +96,27 @@ int main(void)
   MX_GPIO_Init();
 
   /* USER CODE BEGIN 2 */
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET);
-
-    WF_Init();
-    HAL_Delay(1000);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_SET);
-    HAL_Delay(1000);
-//    WF_CommThread();
-    
-    
+  
+    // Init ServoController communication protocol.
     SERVO_PROTOCOL_Init();
+    // Set default servos positions.
+    uint16_t channelsValues[SERVO_CHANNELS_NUMBER];
+    for (uint8_t i = 0; i < SERVO_CHANNELS_NUMBER; i++)
+    {
+        channelsValues[i] = DEFAULT_SERVO_POSITION_PULSE;
+    }
+    SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNELS, 0, channelsValues, SERVO_CHANNELS_NUMBER);
     
+  
+    // Init WiFi.
+    HAL_GPIO_WritePin(WIFI_RESET_PORT, WIFI_RESET_PIN, GPIO_PIN_RESET);
+    HAL_Delay(50);
+    HAL_GPIO_WritePin(WIFI_RESET_PORT, WIFI_RESET_PIN, GPIO_PIN_SET);
+    HAL_Delay(50);
+    WF_Init();
+   
+    
+    // Init variables.
     straightVelocity = 0;
     lateralVelocity = 0;
     angularVelocity = 0;
@@ -128,14 +145,20 @@ int main(void)
   
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  
+  // WiFi communication thread.
   osThreadDef(wfCommTask, WF_CommThread, osPriorityNormal, 0, 128);
   wfCommTaskHandle = osThreadCreate(osThread(wfCommTask), NULL);
+  
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
+  
+  // Incoming robot commands queue.
   wfQueue = xQueueCreate(WF_QUEUE_SIZE, sizeof(WF_Robo_Packet *));
   WF_SetRxQueue(wfQueue);
+  
   /* USER CODE END RTOS_QUEUES */
  
   
@@ -279,7 +302,6 @@ void MX_GPIO_Init(void)
 void StartDefaultTask(void const * argument)
 {
     WF_Robo_Packet *packet;
-    uint8_t channel;
     uint8_t value;
     int8_t value_s;
     uint16_t *data16;
@@ -290,14 +312,13 @@ void StartDefaultTask(void const * argument)
         xQueueReceive(wfQueue, &packet, portMAX_DELAY);
         
         // Process packet here
-        //!!!!!!!!!!!!!!!!
         switch (packet->cmd)
         {
             case WF_ROBOT_SET_CHANNEL:
                 if (controlMode == RCM_DIRECT_SERVO_MODE)
                 {
-                    channel = packet->data[0];  //Number of channel
-                    data16 = (uint16_t *)(&packet->data[1]);
+                    uint8_t channel = packet->data[0];              // Number of channel.
+                    data16 = (uint16_t *)(&packet->data[1]);        // Value of channel.
                     SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNEL, channel, data16, 1);
                 }
                 
@@ -306,9 +327,13 @@ void StartDefaultTask(void const * argument)
             case WF_ROBOT_SET_CHANNELS:
                 if (controlMode == RCM_DIRECT_SERVO_MODE)
                 {
-                    channel = packet->data[0];  //Number of channels values
-                    data16 = (uint16_t *)(&packet->data[1]);
-                    SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNEL, channel, data16, channel);
+                    uint8_t channelsNum = packet->data[0];
+                    
+                    if (channelsNum == SERVO_CHANNELS_NUMBER)
+                    {
+                        data16 = (uint16_t *)(&packet->data[1]);
+                        SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNELS, 0, data16, channelsNum);
+                    }
                 }
                 
                 break;

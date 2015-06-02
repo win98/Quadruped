@@ -595,14 +595,14 @@ void WF_ParseRequest (uint8_t *data, uint32_t dataLength, uint32_t address, uint
             if (address == remote_client_address && port == remote_client_port)
             {
                 uint8_t channelsNum = data[1];
-                uint8_t minLength = 2 + channelsNum * 2;
+                uint8_t minLength = 2 + channelsNum * 2;    // cmd, channelsNumber, 2 * channelsData 
                 
                 if (dataLength >= minLength)
                 {
                     cmdData = &data[1];
                 
                     // Data comes in Little-endian format.
-                    WF_Robo_Packet *packet =  WF_CreateRobotPacket(robotCmd, cmdData, minLength);
+                    WF_Robo_Packet *packet =  WF_CreateRobotPacket(robotCmd, cmdData, minLength - 1);
                     // Send data to main thread.
                     xQueueSend(udpQueue, &packet, portMAX_DELAY);
                 

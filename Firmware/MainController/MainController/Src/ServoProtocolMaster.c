@@ -17,8 +17,8 @@ void SERVO_PROTOCOL_Init (void)
                           
 void SERVO_PROTOCOL_SendCommand (SERVO_PROTOCOL_Command cmd, uint8_t channelNum, uint16_t *data, uint32_t dataLength)
 {
-    //data stores values in Little-endian format.
-    //ServoController uses this format too.
+    //data contains values in Little-endian format.
+    //ServoController protocol uses this format too.
     
     servoTxBuffer[0] = cmd;
     
@@ -28,8 +28,8 @@ void SERVO_PROTOCOL_SendCommand (SERVO_PROTOCOL_Command cmd, uint8_t channelNum,
     {
         case SERVO_SET_CHANNEL:
             servoTxBuffer[1] = channelNum;
-            servoTxBuffer[2] = (uint8_t)(data[0] >> 8);
-            servoTxBuffer[3] = (uint8_t)data[0];
+            servoTxBuffer[2] = (uint8_t)data[0];            // LO byte of uint16_t
+            servoTxBuffer[3] = (uint8_t)(data[0] >> 8);     // HI byte of uint16_t
             
             origLength = 4;
         
@@ -39,8 +39,8 @@ void SERVO_PROTOCOL_SendCommand (SERVO_PROTOCOL_Command cmd, uint8_t channelNum,
             for (int i = 0; i < dataLength; i++)
             {
                 uint16_t value = data[i];
-                servoTxBuffer[1 + i] = (uint8_t)(value >> 8);
-                servoTxBuffer[2 + i] = (uint8_t)value;
+                servoTxBuffer[1 + i * 2] = (uint8_t)value;            // LO byte of uint16_t
+                servoTxBuffer[2 + i * 2] = (uint8_t)(value >> 8);     // HI byte of uint16_t
             }
         
             origLength = 1 + dataLength * 2;
