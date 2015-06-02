@@ -130,8 +130,6 @@ void ServoProtocolEventCallback (SERVO_PROTOCOL_Event *event)
     
     SERVO_PROTOCOL_Command cmd = (SERVO_PROTOCOL_Command)rxData[0];
     uint8_t channelIdx;
-    uint16_t value;
-    uint8_t *data;
     bool error = false;
     
     switch (cmd)
@@ -142,9 +140,11 @@ void ServoProtocolEventCallback (SERVO_PROTOCOL_Event *event)
                 channelIdx = rxData[1];
                 if (channelIdx < SERVO_TotalChannelsNum)
                 {
-                    //Value comes in Little-endian format
-                    value = (uint16_t)rxData[2] << 8 | (uint16_t)rxData[3];
-                    SERVO_CONTROLLER_SetChannel((SERVO_ChannelId)channelIdx, value);
+                    // Value comes in Little-endian format.
+                    // ARM on board also works in Little-endian format.
+                    // So just cast pointer to 1st byte of value to uint16_t*.
+                    uint16_t *value = (uint16_t *)(rxData + 2);
+                    SERVO_CONTROLLER_SetChannel((SERVO_ChannelId)channelIdx, *value);
                 }
                 else
                 {
@@ -160,8 +160,11 @@ void ServoProtocolEventCallback (SERVO_PROTOCOL_Event *event)
         case SERVO_SET_CHANNELS:
             if (rxLength >= MIN_SET_CHANNELS_CMD_DATA_LENGTH)
             {
-                data = &rxData[1];
-                SERVO_CONTROLLER_SetChannels((uint16_t *)data);
+                // Values come in Little-endian format.
+                // ARM on board also works in Little-endian format.
+                // So just cast poionter to 1st byte of value to uint16_t*.
+                uint16_t *values = (uint16_t *)(rxData + 1);
+                SERVO_CONTROLLER_SetChannels(values);
             }
             else
             {
