@@ -39,12 +39,16 @@
 /* USER CODE BEGIN Includes */
 #include "WiFiCommModule.h"
 #include "ServoProtocolMaster.h"
+
+#include "QuadrupedLeg.h"
+#include "QuadrupedCreepGait.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 osThreadId defaultTaskHandle;
 osThreadId wfCommTaskHandle;
+osThreadId quadrTaskHandle;
 
 xQueueHandle wfQueue;
 
@@ -52,6 +56,8 @@ ROBOT_CONTROL_MODE controlMode;
 int8_t straightVelocity;
 int8_t lateralVelocity;
 int8_t angularVelocity;
+
+uint16_t legsPulses[24];
 
 /* USER CODE BEGIN PV */
 
@@ -68,6 +74,7 @@ int8_t angularVelocity;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void StartDefaultTask(void const * argument);
+void quadrupedTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 #define WF_QUEUE_SIZE   1
@@ -99,6 +106,7 @@ int main(void)
   
     // Init ServoController communication protocol.
     SERVO_PROTOCOL_Init();
+    /*
     // Set default servos positions.
     uint16_t channelsValues[SERVO_CHANNELS_NUMBER];
     for (uint8_t i = 0; i < SERVO_CHANNELS_NUMBER; i++)
@@ -106,7 +114,7 @@ int main(void)
         channelsValues[i] = DEFAULT_SERVO_POSITION_PULSE;
     }
     SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNELS, 0, channelsValues, SERVO_CHANNELS_NUMBER);
-    
+    */
   
     // Init WiFi.
     HAL_GPIO_WritePin(WIFI_RESET_PORT, WIFI_RESET_PIN, GPIO_PIN_RESET);
@@ -147,9 +155,11 @@ int main(void)
   /* add threads, ... */
   
   // WiFi communication thread.
-  osThreadDef(wfCommTask, WF_CommThread, osPriorityNormal, 0, 128);
+  osThreadDef(wfCommTask, WF_CommThread, osPriorityHigh, 0, 128);
   wfCommTaskHandle = osThreadCreate(osThread(wfCommTask), NULL);
   
+  osThreadDef(quadrTask, quadrupedTask, osPriorityHigh, 0, 128);
+  quadrTaskHandle = osThreadCreate(osThread(quadrTask), NULL);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -381,6 +391,95 @@ void StartDefaultTask(void const * argument)
         osDelay(1);
     }
   /* USER CODE END 5 */ 
+}
+
+// Legs physical dimensions.
+#define COXA_LEN    5.5f
+#define FEMUR_LEN   6.0f
+#define TIBIA_LEN   8.5f
+
+// Idle position of foot.
+#define IDLE_OFFSET_X     8.0f
+#define IDLE_OFFSET_Y     7.0f
+#define IDLE_OFFSET_Z     8.0f
+
+// Indices of ServoController channels dedicated to angles.
+#define RF_COXA_ANGLE_IDX           7
+#define RF_COXA_FEMUR_ANGLE_IDX     6
+#define RF_FEMUR_TIBIA_ANGLE_IDX    3
+
+#define RH_COXA_ANGLE_IDX           2
+#define RH_COXA_FEMUR_ANGLE_IDX     1
+#define RH_FEMUR_TIBIA_ANGLE_IDX    0
+
+#define LF_COXA_ANGLE_IDX           13
+#define LF_COXA_FEMUR_ANGLE_IDX     14
+#define LF_FEMUR_TIBIA_ANGLE_IDX    15
+
+#define LH_COXA_ANGLE_IDX           8
+#define LH_COXA_FEMUR_ANGLE_IDX     12
+#define LH_FEMUR_TIBIA_ANGLE_IDX    23
+
+#define RF_ANGLE_OFFSET         M_PI_4
+#define RH_ANGLE_OFFSET        -M_PI_4
+#define LF_ANGLE_OFFSET         M_PI_4 * 3.0f
+#define LH_ANGLE_OFFSET        -M_PI_4 * 3.0f
+
+void quadrupedTask(void const * argument)
+{
+    QuadrLeg *RF, *RH, *LF, *LH;
+    QuadrCreepGait *creepGait;
+    
+    // Create legs with idle position.
+    RF = quadrLegCreate(COXA_LEN, FEMUR_LEN, TIBIA_LEN, MakeQVec(  IDLE_OFFSET_X,    -IDLE_OFFSET_Y,     IDLE_OFFSET_Z));
+    RH = quadrLegCreate(COXA_LEN, FEMUR_LEN, TIBIA_LEN, MakeQVec(  IDLE_OFFSET_X,    -IDLE_OFFSET_Y,    -IDLE_OFFSET_Z));
+    LF = quadrLegCreate(COXA_LEN, FEMUR_LEN, TIBIA_LEN, MakeQVec( -IDLE_OFFSET_X,    -IDLE_OFFSET_Y,     IDLE_OFFSET_Z));
+    LH = quadrLegCreate(COXA_LEN, FEMUR_LEN, TIBIA_LEN, MakeQVec( -IDLE_OFFSET_X,    -IDLE_OFFSET_Y,    -IDLE_OFFSET_Z));
+
+    creepGait = quadrupedCreepGaitCreate(RF, RH, LF, LH);
+
+    quadrupedCreepGaitStart(creepGait);
+    quadrupedCreepGaitSetStraightVelocity(creepGait, 20);
+    
+    for (uint8_t i = 0; i < SERVO_CHANNELS_NUMBER; i++)
+    {
+        legsPulses[i] = 0;
+    }
+    
+    while (1)
+    {
+        float step = 0.001f;
+        
+        quadrupedCreepGaitUpdate(creepGait, step);
+        
+        // RF leg.
+        legsPulses[RF_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (RF->coxaAngle - RF_ANGLE_OFFSET) * 700 / M_PI_2);
+        legsPulses[RF_COXA_FEMUR_ANGLE_IDX] = 1500;//(uint16_t)RF->coxaFemurAngle;
+        legsPulses[RF_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)RF->femurTibiaAngle;
+        
+        // RH leg.
+        legsPulses[RH_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (RH->coxaAngle - RH_ANGLE_OFFSET) * 700 / M_PI_2);
+        legsPulses[RH_COXA_FEMUR_ANGLE_IDX] = 1500;// (uint16_t)RH->coxaFemurAngle;
+        legsPulses[RH_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)RH->femurTibiaAngle;
+        
+        // LF leg.
+        float angle = LF->coxaAngle;
+        float offset = LF_ANGLE_OFFSET;
+        offset = angle > 0 ? offset : offset - M_PI * 2.0f;
+        legsPulses[LF_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (angle - offset) * 700 / M_PI_2);
+        legsPulses[LF_COXA_FEMUR_ANGLE_IDX] = 1500;// (uint16_t)LF->coxaFemurAngle;
+        legsPulses[LF_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)LF->femurTibiaAngle;
+        
+        // LH leg.
+        angle = LH->coxaAngle;
+        offset = LH_ANGLE_OFFSET;
+        offset = angle < M_PI_4 ? offset : offset + M_PI * 2.0f;        
+        legsPulses[LH_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (angle - offset) * 700 / M_PI_2);
+        legsPulses[LH_COXA_FEMUR_ANGLE_IDX] = 1500;// (uint16_t)LH->coxaFemurAngle;
+        legsPulses[LH_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)LH->femurTibiaAngle;
+        
+        SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNELS, 0, legsPulses, SERVO_CHANNELS_NUMBER);
+    }
 }
 
 #ifdef USE_FULL_ASSERT
