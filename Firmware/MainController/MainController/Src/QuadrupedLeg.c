@@ -40,16 +40,12 @@ void quadrLegUpdate (QuadrLeg *leg, float dt)
     // Coxa angle.
     float x = leg->curFootPos.x;
     float y = leg->curFootPos.z;
-    float angle = atanf(y / x);
-    if (x < 0)
-    {
-        angle = y < 0 ? angle - M_PI : angle + M_PI;
-    }
+    float angle = atan2f(y, x);
     leg->coxaAngle = angle;
     
     // Coxa-femur angle.
     x = leg->curFootPos.x;
-    y = leg->curFootPos.z;
+    y = leg->curFootPos.y;
     float L1 = powf(x * x + y * y, 0.5f);
     x = L1 - leg->coxaLength;
     y = leg->curFootPos.y;

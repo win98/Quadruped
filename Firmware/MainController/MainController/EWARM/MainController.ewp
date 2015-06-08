@@ -943,6 +943,15 @@
         <name>$PROJ_DIR$\..\Src\main.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\Src\QuadrupedCreepGait.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\Src\QuadrupedLeg.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\Src\QuadrupedLegAction.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\Src\ServoProtocolMaster.c</name>
       </file>
       <file>

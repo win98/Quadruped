@@ -155,11 +155,12 @@ int main(void)
   /* add threads, ... */
   
   // WiFi communication thread.
-  osThreadDef(wfCommTask, WF_CommThread, osPriorityHigh, 0, 128);
+  osThreadDef(wfCommTask, WF_CommThread, osPriorityNormal, 0, 128);
   wfCommTaskHandle = osThreadCreate(osThread(wfCommTask), NULL);
   
-  osThreadDef(quadrTask, quadrupedTask, osPriorityHigh, 0, 128);
+  osThreadDef(quadrTask, quadrupedTask, osPriorityNormal, 0, 128);
   quadrTaskHandle = osThreadCreate(osThread(quadrTask), NULL);
+  
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -399,9 +400,9 @@ void StartDefaultTask(void const * argument)
 #define TIBIA_LEN   8.5f
 
 // Idle position of foot.
-#define IDLE_OFFSET_X     8.0f
-#define IDLE_OFFSET_Y     7.0f
-#define IDLE_OFFSET_Z     8.0f
+#define IDLE_OFFSET_X     1.0f
+#define IDLE_OFFSET_Y     10.0f
+#define IDLE_OFFSET_Z     1.0f
 
 // Indices of ServoController channels dedicated to angles.
 #define RF_COXA_ANGLE_IDX           7
@@ -425,6 +426,11 @@ void StartDefaultTask(void const * argument)
 #define LF_ANGLE_OFFSET         M_PI_4 * 3.0f
 #define LH_ANGLE_OFFSET        -M_PI_4 * 3.0f
 
+#define PULSE_WIDTH_PER_PI_2        700.0f
+
+#define COXA_FEMUR_ANGLE_OFFSET     0.15f   // Offset in hardware.
+#define FEMUR_TIBIA_ANGLE_OFFSET   1.57f   // Offset in hardware.
+
 void quadrupedTask(void const * argument)
 {
     QuadrLeg *RF, *RH, *LF, *LH;
@@ -439,7 +445,7 @@ void quadrupedTask(void const * argument)
     creepGait = quadrupedCreepGaitCreate(RF, RH, LF, LH);
 
     quadrupedCreepGaitStart(creepGait);
-    quadrupedCreepGaitSetStraightVelocity(creepGait, 20);
+    quadrupedCreepGaitSetStraightVelocity(creepGait, 0);
     
     for (uint8_t i = 0; i < SERVO_CHANNELS_NUMBER; i++)
     {
@@ -452,31 +458,33 @@ void quadrupedTask(void const * argument)
         
         quadrupedCreepGaitUpdate(creepGait, step);
         
+        float f = PULSE_WIDTH_PER_PI_2 / M_PI_2;
+        
         // RF leg.
-        legsPulses[RF_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (RF->coxaAngle - RF_ANGLE_OFFSET) * 700 / M_PI_2);
-        legsPulses[RF_COXA_FEMUR_ANGLE_IDX] = 1500;//(uint16_t)RF->coxaFemurAngle;
-        legsPulses[RF_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)RF->femurTibiaAngle;
+        legsPulses[RF_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (RF->coxaAngle - RF_ANGLE_OFFSET) * f);
+        legsPulses[RF_COXA_FEMUR_ANGLE_IDX] = (uint16_t)(1500.0f - (RF->coxaFemurAngle + COXA_FEMUR_ANGLE_OFFSET - M_PI_2) * f);
+        legsPulses[RF_FEMUR_TIBIA_ANGLE_IDX] = (uint16_t)(1500.0f - (RF->femurTibiaAngle - FEMUR_TIBIA_ANGLE_OFFSET) * f);
         
         // RH leg.
-        legsPulses[RH_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (RH->coxaAngle - RH_ANGLE_OFFSET) * 700 / M_PI_2);
-        legsPulses[RH_COXA_FEMUR_ANGLE_IDX] = 1500;// (uint16_t)RH->coxaFemurAngle;
-        legsPulses[RH_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)RH->femurTibiaAngle;
+        legsPulses[RH_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (RH->coxaAngle - RH_ANGLE_OFFSET) * f);
+        legsPulses[RH_COXA_FEMUR_ANGLE_IDX] = (uint16_t)(1500.0f - (RH->coxaFemurAngle + COXA_FEMUR_ANGLE_OFFSET - M_PI_2) * f);
+        legsPulses[RH_FEMUR_TIBIA_ANGLE_IDX] = (uint16_t)(1500.0f - (RH->femurTibiaAngle - FEMUR_TIBIA_ANGLE_OFFSET) * f);
         
         // LF leg.
         float angle = LF->coxaAngle;
         float offset = LF_ANGLE_OFFSET;
         offset = angle > 0 ? offset : offset - M_PI * 2.0f;
-        legsPulses[LF_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (angle - offset) * 700 / M_PI_2);
-        legsPulses[LF_COXA_FEMUR_ANGLE_IDX] = 1500;// (uint16_t)LF->coxaFemurAngle;
-        legsPulses[LF_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)LF->femurTibiaAngle;
+        legsPulses[LF_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (angle - offset) * f);
+        legsPulses[LF_COXA_FEMUR_ANGLE_IDX] = (uint16_t)(1500.0f - (LF->coxaFemurAngle + COXA_FEMUR_ANGLE_OFFSET - M_PI_2) * f);
+        legsPulses[LF_FEMUR_TIBIA_ANGLE_IDX] = (uint16_t)(1500.0f - (LF->femurTibiaAngle - FEMUR_TIBIA_ANGLE_OFFSET) * f);
         
         // LH leg.
         angle = LH->coxaAngle;
         offset = LH_ANGLE_OFFSET;
         offset = angle < M_PI_4 ? offset : offset + M_PI * 2.0f;        
-        legsPulses[LH_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (angle - offset) * 700 / M_PI_2);
-        legsPulses[LH_COXA_FEMUR_ANGLE_IDX] = 1500;// (uint16_t)LH->coxaFemurAngle;
-        legsPulses[LH_FEMUR_TIBIA_ANGLE_IDX] = 1500;// (uint16_t)LH->femurTibiaAngle;
+        legsPulses[LH_COXA_ANGLE_IDX] = (uint16_t)(1500.0f + (angle - offset) * f);
+        legsPulses[LH_COXA_FEMUR_ANGLE_IDX] = (uint16_t)(1500.0f - (LH->coxaFemurAngle + COXA_FEMUR_ANGLE_OFFSET - M_PI_2) * f);
+        legsPulses[LH_FEMUR_TIBIA_ANGLE_IDX] = (uint16_t)(1500.0f - (LH->femurTibiaAngle - FEMUR_TIBIA_ANGLE_OFFSET) * f);
         
         SERVO_PROTOCOL_SendCommand (SERVO_SET_CHANNELS, 0, legsPulses, SERVO_CHANNELS_NUMBER);
     }

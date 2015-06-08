@@ -13,9 +13,9 @@
 extern "C" {
 #endif
 
-#define M_PI        3.14159f
-#define M_PI_2      M_PI * 0.5f
-#define M_PI_4      M_PI * 0.25f
+#define M_PI        3.1416f
+#define M_PI_2      1.5708f
+#define M_PI_4      0.7854f
 
 /*
  * Quadruped leg structs and functions.
