@@ -10,13 +10,6 @@
 #include <math.h>
 
 #define TIME_UNITS_NUM_IN_LEG_CYCLE     16
-
-#define MIN_STRAIGHT_VELOCITY      -20.0f
-#define MAX_STRAIGHT_VELOCITY       20.0f
-
-#define MAX_STEP_SIZE               20.0f
-#define STEP_HEIGHT                 3.0f
-
 #define ACTIONS_IN_SEQUENCE     7
 
 uint32_t RFactionsOrderList[ACTIONS_IN_SEQUENCE] = { 0, 1, 2, 3, 4, 5, 6 };
@@ -155,11 +148,22 @@ void quadrupedCreepGaitSetStraightVelocity (QuadrCreepGait *creepGait, float str
         return;
     }
     
-    float stepY = strVel == 0.0f ? 0 : STEP_HEIGHT;
+    if (strVel == 0.0f)
+    {
+        creepGait->step = MakeQVec( 0.0f, 0.0f, 0.0f);
+        creepGait->timeUinit = 0.0f;
+        
+        return;
+    }
+    
+    float stepY = STEP_HEIGHT;
     // New step.
-    creepGait->step = MakeQVec(creepGait->step.x, stepY, MAX_STEP_SIZE / MAX_STRAIGHT_VELOCITY * strVel);
+    float f = (MAX_STEP_SIZE - MIN_STEP_SIZE) / MAX_STRAIGHT_VELOCITY;
+    float zStep = f * strVel;
+    zStep = zStep > 0 ? zStep + MIN_STEP_SIZE : zStep - MIN_STEP_SIZE;
+    creepGait->step = MakeQVec(creepGait->step.x, stepY, zStep);
     // New time unit.
-    creepGait->timeUinit = strVel == 0.0f ? 0 : (creepGait->step.z / strVel) / TIME_UNITS_NUM_IN_LEG_CYCLE;
+    creepGait->timeUinit = (creepGait->step.z / strVel) / TIME_UNITS_NUM_IN_LEG_CYCLE;
 }
 
 void quadrupedCreepGaitSetLateralVelocity (QuadrCreepGait *creepGait, float latVel)

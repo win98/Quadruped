@@ -19,6 +19,13 @@
 extern "C" {
 #endif
 
+#define MIN_STRAIGHT_VELOCITY      -20.0f
+#define MAX_STRAIGHT_VELOCITY       20.0f
+
+#define MIN_STEP_SIZE               5.0f
+#define MAX_STEP_SIZE               20.0f
+#define STEP_HEIGHT                 5.0f
+
 typedef struct
 {
     //private:

@@ -42,6 +42,8 @@
 
 #include "QuadrupedLeg.h"
 #include "QuadrupedCreepGait.h"
+      
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -57,6 +59,8 @@ int8_t straightVelocity;
 int8_t lateralVelocity;
 int8_t angularVelocity;
 
+QuadrCreepGait *creepGait;
+    
 uint16_t legsPulses[24];
 
 /* USER CODE BEGIN PV */
@@ -67,6 +71,8 @@ uint16_t legsPulses[24];
 #define WIFI_RESET_PIN      GPIO_PIN_15
 
 #define DEFAULT_SERVO_POSITION_PULSE    1500
+
+#define JOYSTICK_TILT_VALUE     8
 
 /* USER CODE END PV */
 
@@ -357,16 +363,18 @@ void StartDefaultTask(void const * argument)
                 
             case WF_ROBOT_SET_STRAIGHT_VELOCITY:
                 value_s = (int8_t)packet->data[0];
-                if (value_s >= -8 && value_s <= 8)
+                if (value_s >= -JOYSTICK_TILT_VALUE && value_s <= JOYSTICK_TILT_VALUE)
                 {
                     straightVelocity = value_s;
+                    float f = fabs(MAX_STRAIGHT_VELOCITY / (float)JOYSTICK_TILT_VALUE);
+                    quadrupedCreepGaitSetStraightVelocity(creepGait, straightVelocity * f);
                 }
                 
                 break;
                 
             case WF_ROBOT_SET_LATERAL_VELOCITY:
                 value_s = (int8_t)packet->data[0];
-                if (value_s >= -8 && value_s <= 8)
+                if (value_s >= -JOYSTICK_TILT_VALUE && value_s <= JOYSTICK_TILT_VALUE)
                 {
                     lateralVelocity = value_s;
                 }
@@ -375,7 +383,7 @@ void StartDefaultTask(void const * argument)
             
             case WF_ROBOT_SET_ANGULAR_VELOCITY:
                 value_s = (int8_t)packet->data[0];
-                if (value_s >= -8 && value_s <= 8)
+                if (value_s >= -JOYSTICK_TILT_VALUE && value_s <= JOYSTICK_TILT_VALUE)
                 {
                     angularVelocity = value_s;
                 }
@@ -400,9 +408,9 @@ void StartDefaultTask(void const * argument)
 #define TIBIA_LEN   8.5f
 
 // Idle position of foot.
-#define IDLE_OFFSET_X     1.0f
-#define IDLE_OFFSET_Y     10.0f
-#define IDLE_OFFSET_Z     1.0f
+#define IDLE_OFFSET_X     10.0f
+#define IDLE_OFFSET_Y     6.0f
+#define IDLE_OFFSET_Z     10.0f
 
 // Indices of ServoController channels dedicated to angles.
 #define RF_COXA_ANGLE_IDX           7
@@ -431,10 +439,11 @@ void StartDefaultTask(void const * argument)
 #define COXA_FEMUR_ANGLE_OFFSET     0.15f   // Offset in hardware.
 #define FEMUR_TIBIA_ANGLE_OFFSET   1.57f   // Offset in hardware.
 
+#define TICK_PERIOD      10   // In ms.
+
 void quadrupedTask(void const * argument)
 {
     QuadrLeg *RF, *RH, *LF, *LH;
-    QuadrCreepGait *creepGait;
     
     // Create legs with idle position.
     RF = quadrLegCreate(COXA_LEN, FEMUR_LEN, TIBIA_LEN, MakeQVec(  IDLE_OFFSET_X,    -IDLE_OFFSET_Y,     IDLE_OFFSET_Z));
@@ -452,11 +461,18 @@ void quadrupedTask(void const * argument)
         legsPulses[i] = 0;
     }
     
+    portTickType currentTicks = xTaskGetTickCount();
+    
     while (1)
     {
-        float step = 0.001f;
+        portTickType t0 = xTaskGetTickCount();
+        currentTicks = t0;
+        vTaskDelayUntil(&currentTicks, TICK_PERIOD);
+        portTickType t1 = xTaskGetTickCount();
         
-        quadrupedCreepGaitUpdate(creepGait, step);
+        float tick = (float)(t1 - t0) / 1000.0f;
+        
+        quadrupedCreepGaitUpdate(creepGait, tick);
         
         float f = PULSE_WIDTH_PER_PI_2 / M_PI_2;
         
