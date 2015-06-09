@@ -20,9 +20,9 @@
 #define ACTIONS_IN_SEQUENCE     7
 
 uint32_t RFactionsOrderList[ACTIONS_IN_SEQUENCE] = { 0, 1, 2, 3, 4, 5, 6 };
-uint32_t RHactionsOrderList[ACTIONS_IN_SEQUENCE] = { 1, 2, 3, 4, 5, 6, 0 };
-uint32_t LFactionsOrderList[ACTIONS_IN_SEQUENCE] = { 4, 5, 6, 0, 1, 2, 3 };
-uint32_t LHactionsOrderList[ACTIONS_IN_SEQUENCE] = { 6, 0, 1, 2, 3, 4, 5 };
+uint32_t RHactionsOrderList[ACTIONS_IN_SEQUENCE] = { 6, 0, 1, 2, 3, 4, 5 };
+uint32_t LFactionsOrderList[ACTIONS_IN_SEQUENCE] = { 3, 4, 5, 6, 0, 1, 2 };
+uint32_t LHactionsOrderList[ACTIONS_IN_SEQUENCE] = { 1, 2, 3, 4, 5, 6, 0 };
 
 void quadrupedCreepGaitLegCycleFinished (void *target, void *object);
 void quadrupedCreepGaitModifyActions (QuadrCreepGait *creepGate, QuadrLegMoveSequence *sequence);
@@ -237,7 +237,6 @@ void quadrupedCreepGaitModifyActions (QuadrCreepGait *creepGate, QuadrLegMoveSeq
     idx = actionsOrderList[i++];
     action = sequence->actions[idx];
     quadrLegMoveActionModify(action, MakeQVec(  x,                      y,                  z - HALF_STEP_Z * 0.27f),       tu * 4);
-    idx = actionsOrderList[i++];
 }
 
 void quadrupedCreepGaitLegCycleFinished (void *target, void *object)
