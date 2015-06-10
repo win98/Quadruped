@@ -33,6 +33,8 @@ typedef struct
     float straightVelocity;     // cm/sec.
     float lateralVelocity;      // cm/sec.
     
+    bool reverseStraight;
+    
     QuadrLeg *RFLeg;
     QuadrLeg *RHLeg;
     QuadrLeg *LFLeg;

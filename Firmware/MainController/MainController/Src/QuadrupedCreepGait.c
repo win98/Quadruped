@@ -143,10 +143,12 @@ void quadrupedCreepGaitSetAngularVelocity (QuadrCreepGait *creepGait, float angV
 
 void quadrupedCreepGaitSetStraightVelocity (QuadrCreepGait *creepGait, float strVel)
 {
-    if (strVel > MAX_STRAIGHT_VELOCITY && strVel < MIN_STRAIGHT_VELOCITY)
+    if (strVel > MAX_STRAIGHT_VELOCITY || strVel < MIN_STRAIGHT_VELOCITY)
     {
         return;
     }
+    
+    creepGait->straightVelocity = strVel;
     
     if (strVel == 0.0f)
     {
@@ -155,6 +157,8 @@ void quadrupedCreepGaitSetStraightVelocity (QuadrCreepGait *creepGait, float str
         
         return;
     }
+    
+    creepGait->reverseStraight = strVel < 0;
     
     float stepY = STEP_HEIGHT;
     // New step.
@@ -187,22 +191,22 @@ void quadrupedCreepGaitModifyActions (QuadrCreepGait *creepGate, QuadrLegMoveSeq
     if (sequence == creepGate->RFsequence)
     {
         leg = creepGate->RFLeg;
-        actionsOrderList = RFactionsOrderList;
+        actionsOrderList = creepGate->reverseStraight == false ? RFactionsOrderList : LHactionsOrderList;
     }
     else if (sequence == creepGate->RHsequence)
     {
         leg = creepGate->RHLeg;
-        actionsOrderList = RHactionsOrderList;
+        actionsOrderList = creepGate->reverseStraight == false ? RHactionsOrderList : LFactionsOrderList;
     }
     else if (sequence == creepGate->LFsequence)
     {
         leg = creepGate->LFLeg;
-        actionsOrderList = LFactionsOrderList;
+        actionsOrderList = creepGate->reverseStraight == false ? LFactionsOrderList : RHactionsOrderList;
     }
     else if (sequence == creepGate->LHsequence)
     {
         leg = creepGate->LHLeg;
-        actionsOrderList = LHactionsOrderList;
+        actionsOrderList = creepGate->reverseStraight == false ? LHactionsOrderList : RFactionsOrderList;
     }
     else
     {
